@@ -21,7 +21,7 @@ public class AbstractResponse {
     private HttpStatus code;
 
     public AbstractResponse(HttpStatus httpStatusCode, String message) {
-        this.status=ResponseType.FAILURE;
+        this.status = ResponseType.FAILURE;
         this.message=message;
         this.count=0;
         this.code=httpStatusCode;
