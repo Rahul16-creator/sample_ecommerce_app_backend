@@ -1,12 +1,10 @@
 package com.shopping_app.shoppingApp.Exceptions;
 
-
 import com.shopping_app.shoppingApp.model.Response.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-
 import javax.validation.ConstraintViolationException;
 
 @ControllerAdvice

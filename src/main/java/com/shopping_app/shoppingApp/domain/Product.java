@@ -23,7 +23,7 @@ public class Product extends BaseEntity {
     private String description;
 
     @Column(name = "available_quantity", nullable = false)
-    private Integer availableQuantity;
+    private int availableQuantity;
 
     // todo replace all getter setters with lombok once mapstruct bug fix done
     public String getProductName() {
