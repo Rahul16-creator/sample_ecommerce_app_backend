@@ -20,7 +20,7 @@ public class AbstractResponse {
     private Integer count;
     private HttpStatus code;
 
-    public AbstractResponse(HttpStatus httpStatusCode,String message) {
+    public AbstractResponse(HttpStatus httpStatusCode, String message) {
         this.status=ResponseType.FAILURE;
         this.message=message;
         this.count=0;
