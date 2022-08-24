@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 import org.springframework.http.HttpStatus;
 
 @Getter
@@ -14,6 +15,7 @@ import org.springframework.http.HttpStatus;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@SuperBuilder(builderMethodName = "baseBuilder")
 public class AbstractResponse {
     private ResponseType status;
     private String message;

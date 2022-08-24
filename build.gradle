@@ -31,10 +31,11 @@ dependencies {
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.2.Final'
 
 //	lombok
-	ext.lombokVersion = "1.18.20"
+	ext.lombokVersion = "1.18.22"
 	implementation "org.projectlombok:lombok:${ext.lombokVersion}"
 	annotationProcessor 'org.projectlombok:lombok'
 
+	implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
 
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
