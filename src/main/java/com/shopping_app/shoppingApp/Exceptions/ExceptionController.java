@@ -22,7 +22,7 @@ public class ExceptionController {
         return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
     }
 
-    // todo check for better way to handle global exception
+    // TODO check for better way to handle global exception
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse> handleGlobalApplicationException(Exception ex) {
         StringBuilder sb = new StringBuilder();
