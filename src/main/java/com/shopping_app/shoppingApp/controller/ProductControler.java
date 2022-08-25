@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import javax.validation.Valid;
 import java.util.List;
 
@@ -33,7 +32,6 @@ public class ProductControler {
         List<ProductResponse> allProducts = productService.getAllProducts();
         ApiResponse<List<ProductResponse>> Response = new ApiResponse<List<ProductResponse>>(HttpStatus.OK, "All Product Fetched Successfully", allProducts.size(), ResponseType.SUCCESS, allProducts);
         return new ResponseEntity<>(Response, Response.getCode());
-
     }
 
     @GetMapping("/{productId}")
@@ -41,7 +39,6 @@ public class ProductControler {
         ProductResponse productResponse = productService.getProductById(productId);
         ApiResponse<ProductResponse> Response = new ApiResponse<ProductResponse>(HttpStatus.OK, "Product Fetched Successfully", 1, ResponseType.SUCCESS, productResponse);
         return new ResponseEntity<>(Response, Response.getCode());
-
     }
 
     // todo add @valid handle exception in exception class
@@ -50,7 +47,6 @@ public class ProductControler {
         ProductResponse productResponse = productService.addProduct(productRequest);
         ApiResponse<ProductResponse> Response = new ApiResponse<ProductResponse>(HttpStatus.OK, "Product added Successfully", 1, ResponseType.SUCCESS, productResponse);
         return new ResponseEntity<>(Response, Response.getCode());
-
     }
 
 }

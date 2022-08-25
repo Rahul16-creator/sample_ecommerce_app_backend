@@ -25,5 +25,5 @@ public class CartItems extends BaseEntity{
     private Product product;
 
     @Column(nullable = false)
-    private Integer quantity;
+    private int quantity;
 }

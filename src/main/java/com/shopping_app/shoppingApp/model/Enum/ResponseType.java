@@ -1,6 +1,5 @@
 package com.shopping_app.shoppingApp.model.Enum;
 
-
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
