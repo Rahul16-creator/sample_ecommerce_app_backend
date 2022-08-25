@@ -9,6 +9,7 @@ import com.shopping_app.shoppingApp.repository.ProductRepository;
 import com.shopping_app.shoppingApp.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -17,11 +18,15 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor(onConstructor = @__({@Autowired}))
 public class ProductServiceImpl implements ProductService {
 
-    private final ProductRepository productRepository;
-    private final ProductMapper productMapper;
+    private ProductRepository productRepository;
+    private ProductMapper productMapper;
+
+    public ProductServiceImpl(ProductRepository productRepository, @Qualifier("productMapperImpl") ProductMapper productMapper) {
+        this.productRepository = productRepository;
+        this.productMapper = productMapper;
+    }
 
     @Override
     public ProductResponse addProduct(ProductRequest productRequest) {

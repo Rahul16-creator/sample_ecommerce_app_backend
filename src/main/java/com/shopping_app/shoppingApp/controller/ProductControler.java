@@ -48,7 +48,7 @@ public class ProductControler {
     @PostMapping("/")
     public ResponseEntity<ApiResponse> addProduct(@Valid @RequestBody ProductRequest productRequest) {
         ProductResponse productResponse = productService.addProduct(productRequest);
-        ApiResponse<ProductResponse> Response = new ApiResponse<ProductResponse>(HttpStatus.BAD_REQUEST, "Product added Successfully", 1, ResponseType.SUCCESS, productResponse);
+        ApiResponse<ProductResponse> Response = new ApiResponse<ProductResponse>(HttpStatus.OK, "Product added Successfully", 1, ResponseType.SUCCESS, productResponse);
         return new ResponseEntity<>(Response, Response.getCode());
 
     }
