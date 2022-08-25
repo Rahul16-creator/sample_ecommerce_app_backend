@@ -1,13 +1,11 @@
 package com.shopping_app.shoppingApp.Exceptions;
 
-
 import com.shopping_app.shoppingApp.model.Response.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-
 import javax.validation.ConstraintViolationException;
 
 @ControllerAdvice
@@ -30,7 +28,7 @@ public class ExceptionController  {
         return new ResponseEntity<>(apiResponse, HttpStatus.UNAUTHORIZED);
     }
 
-    // todo check for better way to handle global exception
+    // TODO check for better way to handle global exception
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse> handleGlobalApplicationException(Exception ex) {
         StringBuilder sb = new StringBuilder();

@@ -1,6 +1,5 @@
 package com.shopping_app.shoppingApp.controller;
 
-
 import com.shopping_app.shoppingApp.model.Enum.ResponseType;
 import com.shopping_app.shoppingApp.model.Request.CartAddRequest;
 import com.shopping_app.shoppingApp.model.Response.AddressResponse;
@@ -11,7 +10,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/cart")
@@ -19,7 +22,6 @@ import org.springframework.web.bind.annotation.*;
 public class CartController {
 
     private final CartService cartService;
-
 
     @GetMapping("/")
     public ResponseEntity<ApiResponse> getCart() {
@@ -42,5 +44,4 @@ public class CartController {
                 .status(ResponseType.SUCCESS)
                 .build();
     }
-
 }
