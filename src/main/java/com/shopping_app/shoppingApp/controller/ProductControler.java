@@ -10,12 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 import javax.validation.Valid;
 import java.util.List;
 
@@ -49,4 +45,17 @@ public class ProductControler {
         return new ResponseEntity<>(Response, Response.getCode());
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse> updateProduct(@Valid @RequestBody ProductRequest productRequest,@PathVariable Long id) {
+        ProductResponse productResponse = productService.updateProductById(productRequest,id);
+        ApiResponse<ProductResponse> Response = new ApiResponse<ProductResponse>(HttpStatus.OK, "Product added Successfully", 1, ResponseType.SUCCESS, productResponse);
+        return new ResponseEntity<>(Response, Response.getCode());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse> deleteProduct(@PathVariable Long id) {
+        ProductResponse productResponse = productService.deleteProductById(id);
+        ApiResponse<ProductResponse> Response = new ApiResponse<ProductResponse>(HttpStatus.OK, "Product deleted Successfully", 1, ResponseType.SUCCESS, productResponse);
+        return new ResponseEntity<>(Response, Response.getCode());
+    }
 }
