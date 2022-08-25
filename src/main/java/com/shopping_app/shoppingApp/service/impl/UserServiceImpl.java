@@ -102,7 +102,6 @@ public class UserServiceImpl implements UserService {
             user.setName(UserProfileUpdateRequest.getEmail());
         }
         User updatedUser = userRepository.save(user);
-        log.info(" Updated User {}", updatedUser.getAddress().size());
         return userMapper.convertToUserResponse(updatedUser);
     }
 

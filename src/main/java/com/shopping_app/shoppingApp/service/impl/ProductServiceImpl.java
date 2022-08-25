@@ -8,6 +8,7 @@ import com.shopping_app.shoppingApp.model.Response.ProductResponse;
 import com.shopping_app.shoppingApp.repository.ProductRepository;
 import com.shopping_app.shoppingApp.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -50,6 +51,32 @@ public class ProductServiceImpl implements ProductService {
         Product product = fetchProductById(id);
         ProductResponse productResponse = productMapper.convertToProductResponse(product);
         return productResponse;
+    }
+
+    @Override
+    public ProductResponse updateProductById(ProductRequest productRequest, Long id) {
+        Product product = fetchProductById(id);
+        if (StringUtils.isNotBlank(productRequest.getProductName())) {
+            product.setProductName(productRequest.getProductName());
+        }
+        if (StringUtils.isNotBlank(productRequest.getDescription())) {
+            product.setDescription(productRequest.getDescription());
+        }
+        if (productRequest.getPrice() != null) {
+            product.setDescription(productRequest.getDescription());
+        }
+        if (productRequest.getAvailableQuantity() != null) {
+            product.setAvailableQuantity(productRequest.getAvailableQuantity());
+        }
+        Product updatedProduct = productRepository.save(product);
+        return productMapper.convertToProductResponse(updatedProduct);
+    }
+
+    @Override
+    public ProductResponse deleteProductById(Long id) {
+        Product product = fetchProductById(id);
+        productRepository.deleteById(id);
+        return productMapper.convertToProductResponse(product);
     }
 
     public Product fetchProductById(Long id) {
