@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Set;
 
 
 @AllArgsConstructor
@@ -17,9 +18,9 @@ public class UserResponse {
     private String email;
     private String phoneNumber;
 
-    private List<Address> address;
+    private Set<AddressResponse> address;
 
-    // todo replace getter and  setter with lombok package
+    // TODO replace getter and  setter with lombok package
 
     public String getName() {
         return name;
@@ -53,11 +54,11 @@ public class UserResponse {
         this.id = id;
     }
 
-    public List<Address> getAddress() {
+    public Set<AddressResponse> getAddress() {
         return address;
     }
 
-    public void setAddress(List<Address> address) {
+    public void setAddress(Set<AddressResponse> address) {
         this.address = address;
     }
 }

@@ -4,13 +4,14 @@ package com.shopping_app.shoppingApp.Exceptions;
 import com.shopping_app.shoppingApp.model.Response.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import javax.validation.ConstraintViolationException;
 
 @ControllerAdvice
-public class ExceptionController {
+public class ExceptionController  {
 
     @ExceptionHandler(BaseException.class)
     public ResponseEntity<ApiResponse> handleApplicationException(BaseException baseException) {
@@ -22,6 +23,11 @@ public class ExceptionController {
     public ResponseEntity<ApiResponse> handleConStraintViolationException(ConstraintViolationException ex) {
         ApiResponse apiResponse = new ApiResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
         return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
+    }
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ApiResponse> handleAuthException(AuthenticationException ex) {
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+        return new ResponseEntity<>(apiResponse, HttpStatus.UNAUTHORIZED);
     }
 
     // todo check for better way to handle global exception
