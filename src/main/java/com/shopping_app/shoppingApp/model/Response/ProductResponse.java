@@ -1,10 +1,9 @@
 package com.shopping_app.shoppingApp.model.Response;
 
-
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.*;
-
-
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
 @Builder
 @AllArgsConstructor

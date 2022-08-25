@@ -1,11 +1,10 @@
 package com.shopping_app.shoppingApp.model.Request;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.*;
-
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotBlank;
-
-
 
 @Builder
 @AllArgsConstructor

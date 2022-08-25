@@ -1,6 +1,5 @@
 package com.shopping_app.shoppingApp.model.Response;
 
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.shopping_app.shoppingApp.model.Enum.ResponseType;
 import lombok.AllArgsConstructor;
@@ -22,11 +21,11 @@ public class AbstractResponse {
     private Integer count;
     private HttpStatus code;
 
-    public AbstractResponse(HttpStatus httpStatusCode,String message) {
-        this.status=ResponseType.FAILURE;
-        this.message=message;
-        this.count=0;
-        this.code=httpStatusCode;
+    public AbstractResponse(HttpStatus httpStatusCode, String message) {
+        this.status = ResponseType.FAILURE;
+        this.message = message;
+        this.count = 0;
+        this.code = httpStatusCode;
     }
 
 }

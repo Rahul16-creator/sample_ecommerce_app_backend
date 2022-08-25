@@ -17,11 +17,11 @@ public class ApiResponse<T> extends AbstractResponse {
     private T data;
 
     public ApiResponse(HttpStatus httpStatus, String message) {
-        super(httpStatus,message);
+        super(httpStatus, message);
     }
 
-    public ApiResponse(HttpStatus httpStatus, String message , Integer count, ResponseType type,T data) {
-        super(type,message,count,httpStatus);
-        this.data=data;
+    public ApiResponse(HttpStatus httpStatus, String message, Integer count, ResponseType type, T data) {
+        super(type, message, count, httpStatus);
+        this.data = data;
     }
 }

@@ -4,8 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
 import java.time.LocalDateTime;
 
 @MappedSuperclass
@@ -18,21 +24,13 @@ public abstract class BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;
 
+    @CreationTimestamp
     @Column(name = "created_at", updatable = false, nullable = false)
     protected LocalDateTime createAt;
 
+    @UpdateTimestamp
     @Column(name = "updated_at", updatable = true, nullable = false)
     protected LocalDateTime updatedAt;
-
-    @PrePersist
-    protected void onCreate() {
-        this.createAt = this.updatedAt = (this.createAt == null ? LocalDateTime.now() : this.createAt);
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        this.updatedAt = LocalDateTime.now();
-    }
 
 
     public Long getId() {
