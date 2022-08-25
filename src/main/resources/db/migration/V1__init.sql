@@ -1,0 +1,98 @@
+DROP TABLE IF EXISTS `user`;
+DROP TABLE IF EXISTS `address`;
+DROP TABLE IF EXISTS `product`;
+DROP TABLE IF EXISTS `cart`;
+DROP TABLE IF EXISTS `cart_items`;
+DROP TABLE IF EXISTS `order`;
+DROP TABLE IF EXISTS `order_items`;
+
+
+CREATE TABLE `user`(
+   id BIGINT AUTO_INCREMENT,
+   name VARCHAR(255) NOT NULL ,
+   email VARCHAR(255) NOT NULL ,
+   password VARCHAR(255) NOT NULL ,
+   role VARCHAR(255) NOT NULL ,
+   created_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL ,
+   updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+   PRIMARY KEY (`id`)
+) ;
+
+CREATE TABLE `address` (
+   id BIGINT AUTO_INCREMENT PRIMARY KEY ,
+   street VARCHAR(255),
+   city VARCHAR(255) NOT NULL ,
+   country VARCHAR(255) NOT NULL ,
+   pincode VARCHAR(255) NOT NULL ,
+   user_id BIGINT NOT NULL ,
+   created_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL ,
+   updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+   CONSTRAINT FK_user_id FOREIGN KEY (`user_id`) REFERENCES user(`id`)
+) ;
+
+
+CREATE TABLE `product`(
+    id BIGINT AUTO_INCREMENT,
+    product_name VARCHAR(255) NOT NULL ,
+    price FLOAT(10,7) NOT NULL ,
+    description VARCHAR(255) ,
+    available_quantity INT NOT NULL ,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL ,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`)
+) ;
+
+
+CREATE TABLE `cart`(
+   id BIGINT AUTO_INCREMENT,
+   user_id BIGINT NOT NULL ,
+   created_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL ,
+   updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+   CONSTRAINT FK_cart_user_id FOREIGN KEY (`user_id`) REFERENCES user(`id`),
+   PRIMARY KEY (`id`)
+) ;
+
+
+CREATE TABLE `cart_items`(
+     id BIGINT AUTO_INCREMENT,
+     product_id BIGINT NOT NULL ,
+     cart_id BIGINT NOT NULL ,
+     quantity int NOT NULL ,
+     created_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL ,
+     updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+     CONSTRAINT FK_cart_details_product_id FOREIGN KEY (`product_id`) REFERENCES product(`id`),
+     CONSTRAINT FK_cart_details_cart_id FOREIGN KEY (`cart_id`) REFERENCES cart(`id`),
+     PRIMARY KEY (`id`)
+) ;
+
+CREATE TABLE `order`(
+    id BIGINT AUTO_INCREMENT,
+    user_id BIGINT NOT NULL ,
+    shipping_address_id BIGINT NOT NULL ,
+    order_status VARCHAR(255) NOT NULL ,
+    tracking_number VARCHAR(255) NOT NULL ,
+    delivery_date DATE NOT NULL ,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL ,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT FK_order_user_id FOREIGN KEY (`user_id`) REFERENCES user(`id`),
+    CONSTRAINT FK_shipping_address_id FOREIGN KEY (`shipping_address_id`) REFERENCES address(`id`),
+    PRIMARY KEY (`id`)
+) ;
+
+CREATE TABLE `order_details`(
+    id BIGINT AUTO_INCREMENT,
+    product_id BIGINT NOT NULL ,
+    order_id BIGINT NOT NULL ,
+    quantity int NOT NULL ,
+    total_price FLOAT(10,7)NOT NULL ,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL ,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT FK_order_details_role_id FOREIGN KEY (`product_id`) REFERENCES product(`id`),
+    CONSTRAINT FK_order_details_order_id FOREIGN KEY (`order_id`) REFERENCES `order`(`id`),
+    PRIMARY KEY (`id`)
+) ;
+
+
+
+
+
