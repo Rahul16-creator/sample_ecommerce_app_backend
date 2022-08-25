@@ -6,7 +6,6 @@ DROP TABLE IF EXISTS `cart_items`;
 DROP TABLE IF EXISTS `order`;
 DROP TABLE IF EXISTS `order_items`;
 
-
 CREATE TABLE `user`(
    id BIGINT AUTO_INCREMENT,
    name VARCHAR(255) NOT NULL ,
@@ -30,7 +29,6 @@ CREATE TABLE `address` (
    CONSTRAINT FK_user_id FOREIGN KEY (`user_id`) REFERENCES user(`id`)
 ) ;
 
-
 CREATE TABLE `product`(
     id BIGINT AUTO_INCREMENT,
     product_name VARCHAR(255) NOT NULL ,
@@ -42,7 +40,6 @@ CREATE TABLE `product`(
     PRIMARY KEY (`id`)
 ) ;
 
-
 CREATE TABLE `cart`(
    id BIGINT AUTO_INCREMENT,
    user_id BIGINT NOT NULL ,
@@ -52,11 +49,10 @@ CREATE TABLE `cart`(
    PRIMARY KEY (`id`)
 ) ;
 
-
 CREATE TABLE `cart_items`(
      id BIGINT AUTO_INCREMENT,
      product_id BIGINT NOT NULL ,
-     cart_id BIGINT NOT NULL ,
+     cart_id BIGINT ,
      quantity int NOT NULL ,
      created_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL ,
      updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -91,8 +87,3 @@ CREATE TABLE `order_details`(
     CONSTRAINT FK_order_details_order_id FOREIGN KEY (`order_id`) REFERENCES `order`(`id`),
     PRIMARY KEY (`id`)
 ) ;
-
-
-
-
-

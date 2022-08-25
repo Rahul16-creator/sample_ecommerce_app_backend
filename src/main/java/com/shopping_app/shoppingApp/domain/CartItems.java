@@ -1,6 +1,6 @@
 package com.shopping_app.shoppingApp.domain;
 
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,6 +17,7 @@ import javax.persistence.*;
 public class CartItems extends BaseEntity{
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "cart_id")
     private Cart cart;
 
@@ -25,5 +26,29 @@ public class CartItems extends BaseEntity{
     private Product product;
 
     @Column(nullable = false)
-    private Integer quantity;
+    private int quantity;
+
+    public Cart getCart() {
+        return cart;
+    }
+
+    public void setCart(Cart cart) {
+        this.cart = cart;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
 }
