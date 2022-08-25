@@ -32,7 +32,6 @@ public abstract class BaseEntity {
     @Column(name = "updated_at", updatable = true, nullable = false)
     protected LocalDateTime updatedAt;
 
-
     public Long getId() {
         return id;
     }
