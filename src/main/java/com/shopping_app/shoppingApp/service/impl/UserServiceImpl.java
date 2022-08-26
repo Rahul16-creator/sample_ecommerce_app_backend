@@ -9,8 +9,8 @@ import com.shopping_app.shoppingApp.domain.User;
 import com.shopping_app.shoppingApp.mapping.UserMapper;
 import com.shopping_app.shoppingApp.model.Enum.UserRole;
 import com.shopping_app.shoppingApp.model.Request.UserLoginRequest;
-import com.shopping_app.shoppingApp.model.Request.UserProfileUpdateRequest;
 import com.shopping_app.shoppingApp.model.Request.UserRegisterRequest;
+import com.shopping_app.shoppingApp.model.Request.UserUpdateRequest;
 import com.shopping_app.shoppingApp.model.Response.UserLoginResponse;
 import com.shopping_app.shoppingApp.model.Response.UserResponse;
 import com.shopping_app.shoppingApp.repository.AddressRepository;
@@ -28,7 +28,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -41,7 +40,6 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final AddressRepository addressRepository;
     private final CartRepository cartRepository;
-
     private final UserMapper userMapper;
     private final PasswordEncoder bCryptPasswordEncoder;
     private final AuthenticationManager authenticationManager;
@@ -90,7 +88,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponse updateUserById(UserProfileUpdateRequest UserProfileUpdateRequest, Long id) {
+    public UserResponse updateUserById(UserUpdateRequest UserProfileUpdateRequest, Long id) {
         User user = fetchUserById(id);
         if (StringUtils.isNotBlank(UserProfileUpdateRequest.getName())) {
             user.setName(UserProfileUpdateRequest.getName());

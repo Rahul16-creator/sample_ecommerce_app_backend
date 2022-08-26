@@ -8,10 +8,8 @@ import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-
 import java.util.ArrayList;
 import java.util.Collection;
-
 
 @Component
 @Getter
@@ -22,8 +20,10 @@ public class UserPrincipal implements UserDetails {
 
     private Long id;
     private String username;
+
     @JsonIgnore
     private String password;
+
     private Collection<? extends GrantedAuthority> authorities = new ArrayList<>();
 
     public UserPrincipal(Long id, String email, String password) {

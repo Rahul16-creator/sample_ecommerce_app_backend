@@ -17,7 +17,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/product/")
-@Validated
 @RequiredArgsConstructor(onConstructor = @__({@Autowired}))
 public class ProductControler {
 

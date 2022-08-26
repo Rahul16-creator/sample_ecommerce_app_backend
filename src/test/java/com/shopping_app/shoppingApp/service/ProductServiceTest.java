@@ -11,9 +11,9 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 
@@ -38,7 +38,7 @@ public class ProductServiceTest {
         Product response = productRepository.save(product);
         assertEquals(request.getProductName(), response.getProductName());
         assertEquals(request.getDescription(), response.getDescription());
-        assertEquals(request.getAvailableQuantity(), response.getAvailableQuantity());
+        assertEquals(Optional.ofNullable(request.getAvailableQuantity()), response.getAvailableQuantity());
         assertEquals(request.getPrice(), response.getPrice());
     }
 

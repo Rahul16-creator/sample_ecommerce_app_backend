@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import javax.validation.ConstraintViolationException;
 
 @ControllerAdvice
-public class ExceptionController  {
+public class ExceptionController {
 
     @ExceptionHandler(BaseException.class)
     public ResponseEntity<ApiResponse> handleApplicationException(BaseException baseException) {
@@ -22,13 +22,13 @@ public class ExceptionController  {
         ApiResponse apiResponse = new ApiResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
         return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
     }
+
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<ApiResponse> handleAuthException(AuthenticationException ex) {
         ApiResponse apiResponse = new ApiResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
         return new ResponseEntity<>(apiResponse, HttpStatus.UNAUTHORIZED);
     }
 
-    // TODO check for better way to handle global exception
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse> handleGlobalApplicationException(Exception ex) {
         StringBuilder sb = new StringBuilder();
@@ -37,5 +37,4 @@ public class ExceptionController  {
         ApiResponse apiResponse = new ApiResponse(HttpStatus.INTERNAL_SERVER_ERROR, sb.toString());
         return new ResponseEntity<>(apiResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
 }

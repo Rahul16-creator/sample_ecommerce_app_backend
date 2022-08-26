@@ -16,6 +16,8 @@ import java.util.Set;
 
 @Entity
 @AllArgsConstructor
+@Getter
+@Setter
 @NoArgsConstructor
 public class User extends BaseEntity {
 
@@ -37,57 +39,4 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Address> address;
-
-    // TODO replace getter and  setter with lombok package
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public UserRole getRoleName() {
-        return roleName;
-    }
-
-    public void setRoleName(UserRole roleName) {
-        this.roleName = roleName;
-    }
-
-    public Set<Address> getAddress() {
-        return address;
-    }
-
-    public void setAddress(Set<Address> address) {
-        this.address = address;
-    }
 }
-
-
-
