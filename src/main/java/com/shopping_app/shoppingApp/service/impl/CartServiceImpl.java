@@ -16,6 +16,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -40,14 +42,29 @@ public class CartServiceImpl implements CartService {
     public CartResponse addItemsInCart(CartAddRequest cartRequest) {
         Cart userCart = cartRepository.findByUserId(getUserId());
         Optional<Product> product = productRepository.findById(cartRequest.getCartItemRequest().getProduct_id());
+        boolean isNewItem = checkProductExistInCart(userCart, product.get());
+        System.out.println(isNewItem);
         CartItems cartItem = new CartItems();
-        cartItem.setProduct(product.get());
-        cartItem.setQuantity(cartRequest.getCartItemRequest().getQuantity());
-        cartItem.setCart(userCart);
-        userCart.getCartItems().add(cartItem);
+        if (!isNewItem) {
+            cartItem.setProduct(product.get());
+            cartItem.setQuantity(cartRequest.getCartItemRequest().getQuantity());
+            cartItem.setCart(userCart);
+            userCart.getCartItems().add(cartItem);
+        } else {
+            increaseQuantityInExistintItem(userCart, product.get(), cartRequest.getCartItemRequest().getQuantity());
+        }
         Cart cart = cartRepository.save(userCart);
         Set<CartItemResponse> cartItemResponses = cart.getCartItems().stream().map(this::convertToCartItemResponse).collect(Collectors.toSet());
         return CartResponse.builder().cartItems(cartItemResponses).build();
+    }
+
+    public void increaseQuantityInExistintItem(Cart userCart, Product product, int quantity) {
+        for (CartItems item : userCart.getCartItems()) {
+            System.out.println(item.getQuantity() + " " + item.getProduct().getId() + " " + product.getId());
+            if (item.getProduct().getId() == product.getId()) {
+                item.setQuantity(item.getQuantity() + quantity);
+            }
+        }
     }
 
     public long getUserId() {
@@ -55,29 +72,41 @@ public class CartServiceImpl implements CartService {
         return principal.getId();
     }
 
+    public boolean checkProductExistInCart(Cart cart, Product product) {
+        Set<CartItems> cartItems = cart.getCartItems();
+        for (CartItems e : cartItems) {
+            if (null != e.getProduct() && e.getProduct().getId() == product.getId()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public CartItemResponse convertToCartItemResponse(CartItems cartItems) {
-        if ( cartItems == null ) {
+        if (cartItems == null) {
             return null;
         }
         CartItemResponse cartItemResponse = new CartItemResponse();
-        cartItemResponse.setProductResponse( productResponse( cartItems.getProduct() ) );
-        if ( cartItems.getId() != null ) {
-            cartItemResponse.setId( cartItems.getId() );
+        cartItemResponse.setProductResponse(productResponse(cartItems.getProduct()));
+        if (cartItems.getId() != null) {
+            cartItemResponse.setId(cartItems.getId());
         }
-        cartItemResponse.setQuantity( cartItems.getQuantity() );
+        cartItemResponse.setQuantity(cartItems.getQuantity());
         return cartItemResponse;
     }
 
     public ProductResponse productResponse(Product product) {
-        if ( product == null ) {
+        if (product == null) {
             return null;
         }
         ProductResponse productResponse = new ProductResponse();
-        productResponse.setProductPrice( product.getPrice() );
-        productResponse.setProductDescription( product.getDescription() );
-        productResponse.setId( product.getId() );
-        productResponse.setProductName( product.getProductName() );
-        productResponse.setAvailableQuantity( product.getAvailableQuantity() );
+        productResponse.setProductPrice(product.getPrice());
+        productResponse.setProductDescription(product.getDescription());
+        productResponse.setId(product.getId());
+        productResponse.setProductName(product.getProductName());
+        productResponse.setAvailableQuantity(product.getAvailableQuantity());
         return productResponse;
     }
+
+
 }

@@ -2,7 +2,6 @@ package com.shopping_app.shoppingApp.controller;
 
 import com.shopping_app.shoppingApp.model.Enum.ResponseType;
 import com.shopping_app.shoppingApp.model.Request.CartAddRequest;
-import com.shopping_app.shoppingApp.model.Response.AddressResponse;
 import com.shopping_app.shoppingApp.model.Response.ApiResponse;
 import com.shopping_app.shoppingApp.model.Response.CartResponse;
 import com.shopping_app.shoppingApp.service.CartService;
