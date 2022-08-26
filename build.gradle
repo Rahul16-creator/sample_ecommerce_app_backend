@@ -22,7 +22,7 @@ dependencies {
 	implementation 'org.flywaydb:flyway-core'
 	implementation 'org.flywaydb:flyway-mysql'
 
-	runtimeOnly 'mysql:mysql-connector-java'
+    runtimeOnly 'mysql:mysql-connector-java'
 //	for validation
 	implementation group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final'
 
