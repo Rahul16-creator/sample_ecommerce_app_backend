@@ -7,19 +7,15 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
-@NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class AddressRequest {
+public class UserUpdateRequest {
 
-    private String street;
+    private String name;
 
-    private String city;
+    private String email;
 
-    private String state;
-
-    private String pincode;
-
-    private String country;
+    private String phoneNumber;
 }

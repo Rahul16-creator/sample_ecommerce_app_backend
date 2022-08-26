@@ -11,7 +11,7 @@ import org.mapstruct.ReportingPolicy;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.WARN)
 public interface AddressMapper {
 
-    @Mapping(target = "user",ignore = true)
+    @Mapping(target = "user", ignore = true)
     Address convertToAddress(AddressRequest addressRequest);
 
     @Named("mapAddressResponseData")

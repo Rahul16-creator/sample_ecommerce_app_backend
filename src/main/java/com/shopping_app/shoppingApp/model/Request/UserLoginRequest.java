@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import javax.validation.constraints.NotBlank;
 
 @AllArgsConstructor
@@ -12,22 +11,10 @@ import javax.validation.constraints.NotBlank;
 @Getter
 @Setter
 public class UserLoginRequest {
-    @NotBlank private String email;
-    @NotBlank private String password;
 
-    public String getEmail() {
-        return email;
-    }
+    @NotBlank
+    private String email;
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
+    @NotBlank
+    private String password;
 }

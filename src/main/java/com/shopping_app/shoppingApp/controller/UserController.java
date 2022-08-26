@@ -2,8 +2,8 @@ package com.shopping_app.shoppingApp.controller;
 
 import com.shopping_app.shoppingApp.model.Enum.ResponseType;
 import com.shopping_app.shoppingApp.model.Request.UserLoginRequest;
-import com.shopping_app.shoppingApp.model.Request.UserProfileUpdateRequest;
 import com.shopping_app.shoppingApp.model.Request.UserRegisterRequest;
+import com.shopping_app.shoppingApp.model.Request.UserUpdateRequest;
 import com.shopping_app.shoppingApp.model.Response.ApiResponse;
 import com.shopping_app.shoppingApp.model.Response.UserLoginResponse;
 import com.shopping_app.shoppingApp.model.Response.UserResponse;
@@ -54,7 +54,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse> updateUserById(@RequestBody UserProfileUpdateRequest userProfileUpdateRequest, @PathVariable Long id) {
+    public ResponseEntity<ApiResponse> updateUserById(@RequestBody UserUpdateRequest userProfileUpdateRequest, @PathVariable Long id) {
         UserResponse user = userService.updateUserById(userProfileUpdateRequest, id);
         return new ResponseEntity<>(getResponse("Users Profile Updated Successfully!!", 1, user), HttpStatus.OK);
     }
