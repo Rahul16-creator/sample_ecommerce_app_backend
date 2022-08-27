@@ -3,8 +3,8 @@ package com.shopping_app.shoppingApp.mapping;
 import com.shopping_app.shoppingApp.domain.Cart;
 import com.shopping_app.shoppingApp.domain.CartItems;
 import com.shopping_app.shoppingApp.domain.Product;
-import com.shopping_app.shoppingApp.model.Response.CartItemResponse;
-import com.shopping_app.shoppingApp.model.Response.CartResponse;
+import com.shopping_app.shoppingApp.model.Cart.Response.CartItemResponse;
+import com.shopping_app.shoppingApp.model.Cart.Response.CartResponse;
 import com.shopping_app.shoppingApp.model.Response.ProductResponse;
 import org.mapstruct.*;
 

@@ -1,4 +1,4 @@
-package com.shopping_app.shoppingApp.model.Request;
+package com.shopping_app.shoppingApp.model.Cart.Request;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;

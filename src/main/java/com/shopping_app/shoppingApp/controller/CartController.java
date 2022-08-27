@@ -1,9 +1,9 @@
 package com.shopping_app.shoppingApp.controller;
 
 import com.shopping_app.shoppingApp.model.Enum.ResponseType;
-import com.shopping_app.shoppingApp.model.Request.CartAddRequest;
+import com.shopping_app.shoppingApp.model.Cart.Request.CartAddRequest;
 import com.shopping_app.shoppingApp.model.Response.ApiResponse;
-import com.shopping_app.shoppingApp.model.Response.CartResponse;
+import com.shopping_app.shoppingApp.model.Cart.Response.CartResponse;
 import com.shopping_app.shoppingApp.service.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

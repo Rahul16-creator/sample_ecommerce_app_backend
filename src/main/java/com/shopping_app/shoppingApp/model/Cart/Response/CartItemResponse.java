@@ -1,7 +1,8 @@
-package com.shopping_app.shoppingApp.model.Response;
+package com.shopping_app.shoppingApp.model.Cart.Response;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.shopping_app.shoppingApp.model.Response.ProductResponse;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 

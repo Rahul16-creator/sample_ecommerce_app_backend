@@ -1,6 +1,7 @@
-package com.shopping_app.shoppingApp.model.Request;
+package com.shopping_app.shoppingApp.model.Cart.Request;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.shopping_app.shoppingApp.model.Cart.Request.CartItemRequest;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import java.util.List;
