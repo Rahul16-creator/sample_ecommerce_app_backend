@@ -1,4 +1,4 @@
-package com.shopping_app.shoppingApp.model.Response;
+package com.shopping_app.shoppingApp.model.AbstractClass.Response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.shopping_app.shoppingApp.model.Enum.ResponseType;
@@ -18,14 +18,11 @@ import org.springframework.http.HttpStatus;
 public class AbstractResponse {
     private ResponseType status;
     private String message;
-    private Integer count;
     private HttpStatus code;
 
     public AbstractResponse(HttpStatus httpStatusCode, String message) {
         this.status = ResponseType.FAILURE;
         this.message = message;
-        this.count = 0;
         this.code = httpStatusCode;
     }
-
 }

@@ -1,6 +1,5 @@
 package com.shopping_app.shoppingApp.domain;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

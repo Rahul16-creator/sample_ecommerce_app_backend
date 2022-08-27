@@ -32,6 +32,5 @@ public abstract class BaseEntity {
     @UpdateTimestamp
     @Column(name = "updated_at", updatable = true, nullable = false)
     protected LocalDateTime updatedAt;
-
 }
 

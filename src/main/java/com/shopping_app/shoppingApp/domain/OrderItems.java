@@ -28,4 +28,3 @@ public class OrderItems extends BaseEntity {
     @Column(nullable = false, name = "total_price")
     private Float totalPrice;
 }
-

@@ -1,4 +1,4 @@
-package com.shopping_app.shoppingApp.model.Response;
+package com.shopping_app.shoppingApp.model.Product.Response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
