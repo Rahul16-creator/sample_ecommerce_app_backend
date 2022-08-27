@@ -13,12 +13,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
@@ -28,7 +27,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@RunWith(MockitoJUnitRunner.class)
 @SpringBootTest
 public class AddressTest {
 
@@ -78,7 +77,6 @@ public class AddressTest {
         when(addressRepository.findById(any(Long.class))).thenReturn(Optional.ofNullable(MockPayload.getAddressMockData()));
         when(addressRepository.save(any(Address.class))).thenReturn(address);
         AddressResponse addressResponse = addressMapperImpl.convertToAddressResponse(address);
-        when(addressMapper.convertToAddress(any(AddressRequest.class))).thenReturn(address);
         when(addressMapper.convertToAddressResponse(address)).thenReturn(addressResponse);
         AddressResponse response = addressService.updateAddress(request, 1L);
         assertEquals(request.getStreet(), response.getStreet());
