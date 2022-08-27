@@ -1,4 +1,4 @@
-package com.shopping_app.shoppingApp.model.Request;
+package com.shopping_app.shoppingApp.model.User.Request;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.shopping_app.shoppingApp.domain.Address;

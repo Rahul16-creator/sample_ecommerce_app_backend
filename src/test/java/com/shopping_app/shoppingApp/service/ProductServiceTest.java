@@ -1,83 +1,127 @@
 package com.shopping_app.shoppingApp.service;
 
+import com.shopping_app.shoppingApp.Exceptions.NotFoundException;
 import com.shopping_app.shoppingApp.domain.Product;
 import com.shopping_app.shoppingApp.mapping.ProductMapper;
-import com.shopping_app.shoppingApp.model.Request.ProductRequest;
+import com.shopping_app.shoppingApp.mapping.ProductMapperImpl;
+import com.shopping_app.shoppingApp.model.Product.Request.ProductRequest;
+import com.shopping_app.shoppingApp.model.Product.Response.ProductResponse;
+import com.shopping_app.shoppingApp.payload.MockPayload;
 import com.shopping_app.shoppingApp.repository.ProductRepository;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import java.util.Arrays;
+import org.springframework.web.client.HttpServerErrorException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
+import static com.shopping_app.shoppingApp.payload.MockPayload.*;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.when;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@RunWith(MockitoJUnitRunner.class)
 @SpringBootTest()
 public class ProductServiceTest {
 
-    @Autowired
+    @Mock
     private ProductRepository productRepository;
-    @Autowired
+
+    @Mock
     private ProductMapper productMapper;
 
-    @Before
-    public void addMockData() {
+    @InjectMocks
+    private ProductService productService;
 
+    private ProductMapper productMapperImpl;
+
+    @Before
+    public void setUp() {
+        productMapperImpl = new ProductMapperImpl();
     }
 
     @Test
     public void testAddProductSuccess() {
-        ProductRequest request = ProductRequest.builder().productName("test_product").availableQuantity(1).price(10.1F).description("test description").build();
-        Product product = productMapper.convertToProductDomain(request);
-        Product response = productRepository.save(product);
+        ProductRequest request = MockPayload.getProductRequestMockPayload();
+        Product product = productMapperImpl.convertToProductDomain(request);
+        when(productMapper.convertToProductDomain(any(ProductRequest.class))).thenReturn(product);
+        when(productMapper.convertToProductResponse(any(Product.class))).thenReturn(MockPayload.getProductResponseMockPayload());
+        ProductResponse response = productService.addProduct(request);
+        assertNotNull(response.getId());
         assertEquals(request.getProductName(), response.getProductName());
-        assertEquals(request.getDescription(), response.getDescription());
-        assertEquals(Optional.ofNullable(request.getAvailableQuantity()), response.getAvailableQuantity());
-        assertEquals(request.getPrice(), response.getPrice());
     }
 
-    @Test(expected = NullPointerException.class)
-    public void testAddEmptyProduct() {
-        ProductRequest request = ProductRequest.builder().build();
-        Product product = productMapper.convertToProductDomain(request);
-        productRepository.save(product);
+    @Test
+    public void testAddProductFailure() {
+        ProductRequest request = MockPayload.getProductRequestMockPayload();
+        request.setProductName(null);
+        when(productService.addProduct(any())).thenThrow(HttpServerErrorException.InternalServerError.class);
+        assertThrows(HttpServerErrorException.InternalServerError.class, () -> productService.addProduct(request));
     }
 
     @Test
     public void testGetAllProductsSuccess() {
-        addMockProducts();
-        List<Product> products = productRepository.findAll();
-        assertEquals(products.size(), 5);
+        when(productRepository.findAll()).thenReturn(getAllProductsMockData());
+        List<ProductResponse> response = productService.getAllProducts();
+        assertEquals(5, response.size());
     }
 
     @Test
     public void testGetAllProductsEmpty() {
-        List<Product> products = productRepository.findAll();
-        assertEquals(products.size(), 0);
+        when(productRepository.findAll()).thenReturn(new ArrayList<>());
+        List<ProductResponse> response = productService.getAllProducts();
+        assertEquals(0, response.size());
     }
 
-    @After
-    public void clearMockDbData() {
-        productRepository.deleteAll();
+    @Test
+    public void testGetProductByIdSuccess() {
+        when(productRepository.findById(anyLong())).thenReturn(Optional.ofNullable(getProductMockPayload()));
+        when(productMapper.convertToProductResponse(any(Product.class))).thenReturn(MockPayload.getProductResponseMockPayload());
+        ProductResponse response = productService.getProductById(1L);
+        assertNotNull(response);
+        assertEquals(getProductMockPayload().getProductName(), response.getProductName());
     }
 
-    public void addMockProducts() {
-        ProductRequest request1 = ProductRequest.builder().productName("test_product1").availableQuantity(1).price(10.1F).description("test description").build();
-        ProductRequest request2 = ProductRequest.builder().productName("test_product2").availableQuantity(1).price(10.1F).description("test description").build();
-        ProductRequest request3 = ProductRequest.builder().productName("test_product3").availableQuantity(1).price(10.1F).description("test description").build();
-        ProductRequest request4 = ProductRequest.builder().productName("test_product4").availableQuantity(1).price(10.1F).description("test description").build();
-        ProductRequest request5 = ProductRequest.builder().productName("test_product5").availableQuantity(1).price(10.1F).description("test description").build();
-        Product product1 = productMapper.convertToProductDomain(request1);
-        Product product2 = productMapper.convertToProductDomain(request2);
-        Product product3 = productMapper.convertToProductDomain(request3);
-        Product product4 = productMapper.convertToProductDomain(request4);
-        Product product5 = productMapper.convertToProductDomain(request5);
-        productRepository.saveAll(Arrays.asList(product1, product2, product3, product4, product5));
+    @Test
+    public void testGetProductByIdException() {
+        when(productRepository.findById(anyLong())).thenReturn(Optional.empty());
+        assertThrows(NotFoundException.class, () -> productService.getProductById(1L));
+    }
+
+    @Test
+    public void testDeleteProductByIdSuccess() {
+        when(productRepository.findById(anyLong())).thenReturn(Optional.ofNullable(getProductMockPayload()));
+        when(productMapper.convertToProductResponse(any(Product.class))).thenReturn(MockPayload.getProductResponseMockPayload());
+        ProductResponse response = productService.deleteProductById(1L);
+        assertEquals(getProductMockPayload().getProductName(), response.getProductName());
+    }
+
+    @Test
+    public void testDeleteProductByIdException() {
+        when(productRepository.findById(anyLong())).thenReturn(Optional.empty());
+        assertThrows(NotFoundException.class, () -> productService.deleteProductById(1L));
+    }
+
+    @Test
+    public void testUpdateProductSuccess() {
+        doReturn(getProductResponseMockPayload()).when(productMapper).convertToProductResponse(any());
+        when(productRepository.findById(anyLong())).thenReturn(Optional.of(getProductMockPayload()));
+        when(productRepository.save(any())).thenReturn(getProductMockPayload());
+        ProductResponse response = productService.updateProductById(getProductRequestMockPayload(), 1L);
+        assertNotNull(response.getId());
+    }
+
+    @Test
+    public void testUpdateProductFailure() {
+        when(productRepository.findById(anyLong())).thenReturn(Optional.empty());
+        assertThrows(NotFoundException.class, () -> productService.updateProductById(getProductRequestMockPayload(), 100L));
     }
 }

@@ -42,5 +42,4 @@ public class Order extends BaseEntity {
     @Column(nullable = false, name = "delivery_date")
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate deliveryDate;
-
 }

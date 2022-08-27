@@ -1,4 +1,4 @@
-package com.shopping_app.shoppingApp.model.Request;
+package com.shopping_app.shoppingApp.model.Product.Request;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
@@ -13,7 +13,6 @@ import javax.validation.constraints.NotBlank;
 @Getter
 @Setter
 @NoArgsConstructor
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ProductRequest {
 
     @NotBlank
@@ -22,6 +21,7 @@ public class ProductRequest {
     @NotBlank
     private Float price;
 
+    @NotBlank
     private String description;
 
     @NotBlank
