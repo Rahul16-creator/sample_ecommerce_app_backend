@@ -27,7 +27,7 @@ public class ProductControllerTest extends AbstractController {
         request.setProductName(null);
         HttpEntity<ProductRequest> entity2 = getEntity(request, getHeader());
         ResponseEntity<ApiResponse> response2 = httpCall("/product/", HttpMethod.POST, entity2, ApiResponse.class);
-        assertEquals(500, response2.getStatusCodeValue());
+        assertEquals(400, response2.getStatusCodeValue());
     }
 
     @Test
@@ -67,12 +67,12 @@ public class ProductControllerTest extends AbstractController {
         HttpEntity<ProductRequest> entity1 = getEntity(request, getHeader());
         ResponseEntity<ApiResponse> response = httpCall("/product/" + product.get("id"), HttpMethod.PUT, entity1, ApiResponse.class);
         assertEquals(200, response.getStatusCodeValue());
-        request.setProductName(null);
         HttpEntity<ProductRequest> entity2 = getEntity(request, getHeader());
         ResponseEntity<ApiResponse> response2 = httpCall("/product/100", HttpMethod.PUT, entity2, ApiResponse.class);
         assertEquals(404, response2.getStatusCodeValue());
+        request.setProductName(null);
         ResponseEntity<ApiResponse> response3 = httpCall("/product/"+product.get("id"), HttpMethod.PUT, entity2, ApiResponse.class);
-        assertEquals(500, response3.getStatusCodeValue());
+        assertEquals(400, response3.getStatusCodeValue());
     }
 
     @Test
