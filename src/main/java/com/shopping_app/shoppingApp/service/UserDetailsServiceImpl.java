@@ -1,4 +1,4 @@
-package com.shopping_app.shoppingApp.service.impl;
+package com.shopping_app.shoppingApp.service;
 
 import com.shopping_app.shoppingApp.Exceptions.NotFoundException;
 import com.shopping_app.shoppingApp.domain.User;

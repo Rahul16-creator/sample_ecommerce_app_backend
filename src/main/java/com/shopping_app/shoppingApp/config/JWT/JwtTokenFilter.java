@@ -5,6 +5,7 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureException;
@@ -27,7 +28,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = getAuthToken(request);
         try {
-            log.info("Token from header {}",token);
+            log.info("Token from header {}", token);
             if (StringUtils.isNotBlank(token) && tokenProvider.validateToken(token)) {
                 SecurityContextHolder.getContext().setAuthentication(tokenProvider.getAuthentication(token));
             }
@@ -38,6 +39,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         } catch (UnsupportedJwtException e) {
             log.error("UnSupported Auth Token");
         } catch (Exception e) {
+            log.error(e.getMessage());
             log.error("UnKnown Exception");
         }
         filterChain.doFilter(request, response);
@@ -50,5 +52,4 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         }
         return token.substring(7);
     }
-
 }

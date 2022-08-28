@@ -1,21 +1,19 @@
 package com.shopping_app.shoppingApp.model.Cart.Request;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import javax.validation.constraints.NotBlank;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@Getter
+@Setter
+@Builder
 public class CartAddRequest {
+
+    @NotBlank
     public CartItemRequest cartItemRequest;
-
-    public CartItemRequest getCartItemRequest() {
-        return cartItemRequest;
-    }
-
-    public void setCartItemRequest(CartItemRequest cartItemRequest) {
-        this.cartItemRequest = cartItemRequest;
-    }
 }
-

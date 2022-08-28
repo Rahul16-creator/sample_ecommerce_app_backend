@@ -1,10 +1,10 @@
 package com.shopping_app.shoppingApp.mapping;
 
 import com.shopping_app.shoppingApp.domain.User;
-import com.shopping_app.shoppingApp.model.Request.UserLoginRequest;
-import com.shopping_app.shoppingApp.model.Request.UserRegisterRequest;
-import com.shopping_app.shoppingApp.model.Response.UserLoginResponse;
-import com.shopping_app.shoppingApp.model.Response.UserResponse;
+import com.shopping_app.shoppingApp.model.User.Request.UserLoginRequest;
+import com.shopping_app.shoppingApp.model.User.Request.UserRegisterRequest;
+import com.shopping_app.shoppingApp.model.User.Response.UserLoginResponse;
+import com.shopping_app.shoppingApp.model.User.Response.UserResponse;
 import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Named;

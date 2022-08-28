@@ -25,20 +25,4 @@ public class Cart extends BaseEntity {
 
     @OneToMany(mappedBy = "cart",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private Set<CartItems> cartItems;
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Set<CartItems> getCartItems() {
-        return cartItems;
-    }
-
-    public void setCartItems(Set<CartItems> cartItems) {
-        this.cartItems = cartItems;
-    }
 }

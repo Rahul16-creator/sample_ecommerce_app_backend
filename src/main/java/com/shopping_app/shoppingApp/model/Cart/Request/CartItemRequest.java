@@ -1,29 +1,22 @@
 package com.shopping_app.shoppingApp.model.Cart.Request;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import javax.validation.constraints.NotBlank;
 
 @AllArgsConstructor
+@Getter
+@Setter
+@Builder
 @NoArgsConstructor
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class CartItemRequest {
+
+    @NotBlank
     private Long product_id;
+
+    @NotBlank
     private int quantity;
-
-    public Long getProduct_id() {
-        return product_id;
-    }
-
-    public void setProduct_id(Long product_id) {
-        this.product_id = product_id;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
 }
