@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @AllArgsConstructor
 @Getter
@@ -14,9 +14,9 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 public class CartItemRequest {
 
-    @NotBlank
+    @NotNull
     private Long product_id;
 
-    @NotBlank
+    @NotNull
     private int quantity;
 }
