@@ -56,6 +56,10 @@ public class CartControllerTest extends AbstractController {
         HttpEntity<Object> entity = getEntity(cartItemUpdateRequestPayload, getHeader());
         ResponseEntity<ApiResponse> response = httpCall("/cart/cartItem", HttpMethod.PUT, entity, ApiResponse.class);
         assertEquals(200, response.getStatusCodeValue());
+        cartItemUpdateRequestPayload.setId(-1L);
+        HttpEntity<Object> entity2 = getEntity(cartItemUpdateRequestPayload, getHeader());
+        ResponseEntity<ApiResponse> response2 = httpCall("/cart/cartItem", HttpMethod.PUT, entity2, ApiResponse.class);
+        assertEquals(404, response2.getStatusCodeValue());
     }
 
     @Test
@@ -69,6 +73,8 @@ public class CartControllerTest extends AbstractController {
         HttpEntity<Object> entity = new HttpEntity<>(getHeader());
         ResponseEntity<ApiResponse> response = httpCall("/cart/cartItem/" + carItemId, HttpMethod.DELETE, entity, ApiResponse.class);
         assertEquals(200, response.getStatusCodeValue());
+        ResponseEntity<ApiResponse> response2 = httpCall("/cart/cartItem/100", HttpMethod.DELETE, entity, ApiResponse.class);
+        assertEquals(404, response2.getStatusCodeValue());
     }
 
     public ResponseEntity<ApiResponse> addItemInCart() {
