@@ -28,7 +28,7 @@ public class CartControllerTest extends AbstractController {
         ResponseEntity<ApiResponse> response = addItemInCart();
         assertEquals(200, response.getStatusCodeValue());
         CartAddRequest request = MockPayload.getCartAddRequestPayload();
-        request.getCartItemRequest().setProduct_id(1L);
+        request.getCartItemRequest().setProduct_id(10000L);
         HttpEntity<CartAddRequest> entity2 = getEntity(request, getHeader());
         ResponseEntity<ApiResponse> response2 = httpCall("/cart/", HttpMethod.POST, entity2, ApiResponse.class);
         assertEquals(500, response2.getStatusCodeValue());
