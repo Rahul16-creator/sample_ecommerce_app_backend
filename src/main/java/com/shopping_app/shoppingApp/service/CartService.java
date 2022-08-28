@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -36,7 +37,7 @@ public class CartService {
     public CartResponse getCart() {
         Cart userCart = getCartById(getUserId());
         Set<CartItemResponse> cartItemResponses = userCart.getCartItems().stream().map(this::convertToCartItemResponse).collect(Collectors.toSet());
-        return CartResponse.builder().cartItems(cartItemResponses).build();
+        return CartResponse.builder().id(userCart.getId()).cartItems(cartItemResponses).build();
     }
 
     public CartResponse addItemsInCart(CartAddRequest cartRequest) {
@@ -54,7 +55,7 @@ public class CartService {
         }
         Cart cart = cartRepository.save(userCart);
         Set<CartItemResponse> cartItemResponses = cart.getCartItems().stream().map(this::convertToCartItemResponse).collect(Collectors.toSet());
-        return CartResponse.builder().cartItems(cartItemResponses).build();
+        return CartResponse.builder().id(cart.getId()).cartItems(cartItemResponses).build();
     }
 
     public CartItemResponse deleteCartItem(Long id) {

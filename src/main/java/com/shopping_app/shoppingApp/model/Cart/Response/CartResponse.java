@@ -14,5 +14,6 @@ import java.util.Set;
 @Getter
 @Setter
 public class CartResponse {
+    private Long id;
     private Set<CartItemResponse> cartItems;
 }
