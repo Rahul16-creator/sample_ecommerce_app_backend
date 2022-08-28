@@ -75,12 +75,12 @@ CREATE TABLE `order`(
     PRIMARY KEY (`id`)
 ) ;
 
-CREATE TABLE `order_details`(
+CREATE TABLE `order_items`(
     id BIGINT AUTO_INCREMENT,
     product_id BIGINT NOT NULL ,
     order_id BIGINT NOT NULL ,
     quantity int NOT NULL ,
-    total_price FLOAT(10,7)NOT NULL ,
+    total_price FLOAT(10,3)NOT NULL ,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL ,
     updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     CONSTRAINT FK_order_details_role_id FOREIGN KEY (`product_id`) REFERENCES product(`id`),

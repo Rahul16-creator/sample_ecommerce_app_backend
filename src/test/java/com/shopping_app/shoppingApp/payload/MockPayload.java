@@ -1,16 +1,15 @@
 package com.shopping_app.shoppingApp.payload;
 
-import com.shopping_app.shoppingApp.domain.Address;
-import com.shopping_app.shoppingApp.domain.Cart;
-import com.shopping_app.shoppingApp.domain.CartItems;
-import com.shopping_app.shoppingApp.domain.Product;
-import com.shopping_app.shoppingApp.domain.User;
+import com.shopping_app.shoppingApp.domain.*;
 import com.shopping_app.shoppingApp.mapping.ProductMapper;
 import com.shopping_app.shoppingApp.mapping.ProductMapperImpl;
 import com.shopping_app.shoppingApp.model.Address.Request.AddressRequest;
 import com.shopping_app.shoppingApp.model.Cart.Request.CartAddRequest;
 import com.shopping_app.shoppingApp.model.Cart.Request.CartItemRequest;
 import com.shopping_app.shoppingApp.model.Cart.Request.CartItemUpdateRequest;
+import com.shopping_app.shoppingApp.model.Enum.OrderStatus;
+import com.shopping_app.shoppingApp.model.Order.Request.OrderAddRequest;
+import com.shopping_app.shoppingApp.model.Order.Request.OrderUpdateRequest;
 import com.shopping_app.shoppingApp.model.Product.Request.ProductRequest;
 import com.shopping_app.shoppingApp.model.Product.Response.ProductResponse;
 import com.shopping_app.shoppingApp.model.User.Request.UserLoginRequest;
@@ -18,6 +17,7 @@ import com.shopping_app.shoppingApp.model.User.Request.UserRegisterRequest;
 import com.shopping_app.shoppingApp.model.User.Request.UserUpdateRequest;
 import com.shopping_app.shoppingApp.model.User.Response.UserLoginResponse;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -157,4 +157,32 @@ public class MockPayload {
         return CartItemUpdateRequest.builder().quantity(1).id(1L).build();
     }
 
+    public static Order getOrderMockPayload() {
+        Order order = new Order();
+        order.setId(1L);
+        order.setTrackingNumber("12345");
+        order.setShippingAddress(getAddressMockData());
+        order.setDeliveryDate(LocalDate.now());
+        order.setStatus(OrderStatus.BOOKED);
+        Set<OrderItems> orderItems = new HashSet<>();
+        orderItems.add(geOrderItemMockPayload());
+        order.setOrderItems(orderItems);
+        return order;
+    }
+
+    public static OrderItems geOrderItemMockPayload() {
+        OrderItems orderItems = new OrderItems();
+        orderItems.setTotalPrice(100.0F);
+        orderItems.setQuantity(1);
+        orderItems.setProduct(getProductMockPayload());
+        return orderItems;
+    }
+
+    public static OrderAddRequest getOrderAddMockerRequest() {
+        return OrderAddRequest.builder().cartId(1L).shippingAddressId(1L).build();
+    }
+
+    public static OrderUpdateRequest getOrderUpdateRequestMockPayload() {
+        return OrderUpdateRequest.builder().orderStatus(OrderStatus.DELIVERED).id(1L).build();
+    }
 }

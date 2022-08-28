@@ -7,7 +7,8 @@ import lombok.AllArgsConstructor;
 public enum OrderStatus implements BaseEnum {
 
     BOOKED("booked"),
-    PENDING("pending"),
+    OFD("out_for_delivery"),
+    SHIPPED("shipped"),
     FAILED("failed"),
     DELIVERED("delivered");
 
