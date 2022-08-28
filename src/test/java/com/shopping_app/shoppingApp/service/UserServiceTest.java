@@ -23,7 +23,9 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.Optional;
 
@@ -61,6 +63,9 @@ public class UserServiceTest {
     private AuthenticationManager authenticationManager;
 
     @Mock
+    private Authentication authentication;
+
+    @Mock
     private UserMapper userMapper;
 
     private UserMapperImpl userMapperImpl = new UserMapperImpl();
@@ -86,15 +91,13 @@ public class UserServiceTest {
         assertThrows(UserAlreadyExist.class, () -> userService.registerUser(request));
     }
 
-    //    TODO check for solution
-//    @Test
-    public void testUserLoginSuccess() {
+    @Test
+    public void testUserLogin() {
         String token = "7423672436737623";
         UserLoginRequest userLoginMockRequestPayload = MockPayload.getUserLoginMockRequestPayload();
-        UserLoginResponse response = userMapperImpl.convertToUserLoginResponse(userLoginMockRequestPayload, token);
-        when(authenticationManager.authenticate(any())).thenReturn(any());
+        when(authenticationManager.authenticate(any())).thenReturn(authentication);
         when(tokenProvider.createToken(any())).thenReturn(token);
-        when(userMapper.convertToUserLoginResponse(any(UserLoginRequest.class), eq(token))).thenReturn(response);
+        when(userMapper.convertToUserLoginResponse(any(UserLoginRequest.class), eq(token))).thenReturn(MockPayload.getUserLoginMockResponsePayload());
         UserLoginResponse userLoginResponse = userService.loginUser(userLoginMockRequestPayload);
         assertNotNull(userLoginResponse.getToken());
     }
