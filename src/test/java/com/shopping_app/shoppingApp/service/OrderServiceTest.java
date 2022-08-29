@@ -8,6 +8,7 @@ import com.shopping_app.shoppingApp.mapping.ProductMapper;
 import com.shopping_app.shoppingApp.model.Address.Response.AddressResponse;
 import com.shopping_app.shoppingApp.model.Enum.OrderStatus;
 import com.shopping_app.shoppingApp.model.Order.Response.OrderResponse;
+import com.shopping_app.shoppingApp.repository.CartItemRepository;
 import com.shopping_app.shoppingApp.repository.OrderRepository;
 import com.shopping_app.shoppingApp.utils.UserPrincipal;
 import org.junit.Before;
@@ -63,6 +64,9 @@ public class OrderServiceTest {
 
     @Mock
     private UserPrincipal userPrincipal;
+
+    @Mock
+    private CartItemRepository cartItemRepository;
     @InjectMocks
     private OrderService orderService;
 

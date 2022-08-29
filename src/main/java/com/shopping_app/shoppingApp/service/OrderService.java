@@ -9,11 +9,13 @@ import com.shopping_app.shoppingApp.domain.OrderItems;
 import com.shopping_app.shoppingApp.domain.User;
 import com.shopping_app.shoppingApp.mapping.AddressMapper;
 import com.shopping_app.shoppingApp.mapping.ProductMapper;
+import com.shopping_app.shoppingApp.model.Cart.Response.CartItemResponse;
 import com.shopping_app.shoppingApp.model.Enum.OrderStatus;
 import com.shopping_app.shoppingApp.model.Order.Request.OrderAddRequest;
 import com.shopping_app.shoppingApp.model.Order.Request.OrderUpdateRequest;
 import com.shopping_app.shoppingApp.model.Order.Response.OrderItemResponse;
 import com.shopping_app.shoppingApp.model.Order.Response.OrderResponse;
+import com.shopping_app.shoppingApp.repository.CartItemRepository;
 import com.shopping_app.shoppingApp.repository.OrderRepository;
 import com.shopping_app.shoppingApp.utils.UserPrincipal;
 import lombok.RequiredArgsConstructor;
@@ -42,6 +44,8 @@ public class OrderService {
     private final AddressService addressService;
     private final AddressMapper addressMapper;
     private final ProductMapper productMapper;
+
+    private final CartItemRepository cartItemRepository;
 
     public List<OrderResponse> getAllOrder() {
         List<Order> orders = orderRepository.findAll();
@@ -116,7 +120,7 @@ public class OrderService {
 
     public void removeItemsFromCart(Set<CartItems> cartItems) {
         for (CartItems e : cartItems) {
-            cartService.deleteCartItem(e.getId());
+            cartItemRepository.deleteCartItems(e.getId());
         }
     }
 
