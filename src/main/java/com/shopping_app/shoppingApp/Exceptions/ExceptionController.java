@@ -49,7 +49,7 @@ public class ExceptionController {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse> handleGlobalApplicationException(Exception ex) {
         StringBuilder sb = new StringBuilder();
-        if (null == ex.getMessage()) {
+        if (ex.getMessage() == null) {
             sb.append("Internal Server Error");
         } else {
             sb.append(ex.getMessage());
