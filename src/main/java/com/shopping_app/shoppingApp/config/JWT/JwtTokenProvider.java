@@ -4,7 +4,6 @@ import java.util.Base64;
 import java.util.Date;
 import javax.annotation.PostConstruct;
 
-import com.shopping_app.shoppingApp.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

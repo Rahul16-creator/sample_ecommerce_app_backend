@@ -16,7 +16,6 @@ import com.shopping_app.shoppingApp.model.User.Response.UserResponse;
 import com.shopping_app.shoppingApp.repository.AddressRepository;
 import com.shopping_app.shoppingApp.repository.CartRepository;
 import com.shopping_app.shoppingApp.repository.UserRepository;
-import com.shopping_app.shoppingApp.utils.UserPrincipal;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +24,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -120,95 +116,81 @@ public class UserService {
     }
 
     public List<UserResponse> convertToUserDomainList(List<User> users) {
-        if ( users == null ) {
+        if (users == null) {
             return null;
         }
 
-        List<UserResponse> list = new ArrayList<UserResponse>( users.size() );
-        for ( User user : users ) {
-            list.add( convertToUserResponse( user ) );
+        List<UserResponse> list = new ArrayList<UserResponse>(users.size());
+        for (User user : users) {
+            list.add(convertToUserResponse(user));
         }
 
         return list;
     }
 
     public User convertToUserDomain(UserRegisterRequest userRegisterRequest) {
-        if ( userRegisterRequest == null ) {
-            return null;
-        }
-
         User user = new User();
 
-        user.setName( userRegisterRequest.getName() );
-        user.setEmail( userRegisterRequest.getEmail() );
-        user.setPhoneNumber( userRegisterRequest.getPhoneNumber() );
-        user.setPassword( userRegisterRequest.getPassword() );
-        Set<Address> set = userRegisterRequest.getAddress();
-        if ( set != null ) {
-            user.setAddress( new LinkedHashSet<Address>( set ) );
+        user.setName(userRegisterRequest.getName());
+        user.setEmail(userRegisterRequest.getEmail());
+        user.setPhoneNumber(userRegisterRequest.getPhoneNumber());
+        user.setPassword(userRegisterRequest.getPassword());
+        Set<Address> address = userRegisterRequest.getAddress();
+        if (address != null) {
+            user.setAddress(new LinkedHashSet<Address>(address));
         }
 
         return user;
     }
 
     public UserResponse convertToUserResponse(User user) {
-        if ( user == null ) {
+        if (user == null) {
             return null;
         }
 
         UserResponse userResponse = new UserResponse();
 
-        userResponse.setId( user.getId() );
-        userResponse.setName( user.getName() );
-        userResponse.setEmail( user.getEmail() );
-        userResponse.setPhoneNumber( user.getPhoneNumber() );
-        userResponse.setAddress( addressSetToAddressResponseSet( user.getAddress() ) );
+        userResponse.setId(user.getId());
+        userResponse.setName(user.getName());
+        userResponse.setEmail(user.getEmail());
+        userResponse.setPhoneNumber(user.getPhoneNumber());
+        userResponse.setAddress(addressSetToAddressResponseSet(user.getAddress()));
 
         return userResponse;
     }
 
     public UserLoginResponse convertToUserLoginResponse(UserLoginRequest user, String token) {
-        if ( user == null && token == null ) {
+        if (user == null && token == null) {
             return null;
         }
-
-        UserLoginResponse.UserLoginResponseBuilder userLoginResponse = UserLoginResponse.builder();
-
-        if ( user != null ) {
-            userLoginResponse.email( user.getEmail() );
-        }
-        userLoginResponse.token( token );
-
-        return userLoginResponse.build();
+        return UserLoginResponse.builder().email(user.getEmail()).token(token).build();
     }
 
     public AddressResponse addressToAddressResponse(Address address) {
-        if ( address == null ) {
+        if (address == null) {
             return null;
         }
 
         AddressResponse addressResponse = new AddressResponse();
 
-        addressResponse.setId( address.getId() );
-        addressResponse.setStreet( address.getStreet() );
-        addressResponse.setCity( address.getCity() );
-        addressResponse.setState( address.getState() );
-        addressResponse.setPincode( address.getPincode() );
-        addressResponse.setCountry( address.getCountry() );
+        addressResponse.setId(address.getId());
+        addressResponse.setStreet(address.getStreet());
+        addressResponse.setCity(address.getCity());
+        addressResponse.setState(address.getState());
+        addressResponse.setPincode(address.getPincode());
+        addressResponse.setCountry(address.getCountry());
 
         return addressResponse;
     }
 
-    public Set<AddressResponse> addressSetToAddressResponseSet(Set<Address> set) {
-        if ( set == null ) {
+    public Set<AddressResponse> addressSetToAddressResponseSet(Set<Address> addresses) {
+        if (addresses == null) {
             return null;
         }
-
-        Set<AddressResponse> set1 = new LinkedHashSet<AddressResponse>( Math.max( (int) ( set.size() / .75f ) + 1, 16 ) );
-        for ( Address address : set ) {
-            set1.add( addressToAddressResponse( address ) );
+        Set<AddressResponse> addressResponses = new LinkedHashSet<AddressResponse>();
+        for (Address address : addresses) {
+            addressResponses.add(addressToAddressResponse(address));
         }
-
-        return set1;
+        return addressResponses;
     }
 }

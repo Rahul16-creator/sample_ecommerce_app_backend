@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
 import java.util.Optional;
 
 @Service
@@ -58,36 +59,35 @@ public class AddressService {
     }
 
     public Address convertToAddress(AddressRequest addressRequest) {
-        if ( addressRequest == null ) {
+        if (addressRequest == null) {
             return null;
         }
 
         Address address = new Address();
 
-        address.setStreet( addressRequest.getStreet() );
-        address.setCity( addressRequest.getCity() );
-        address.setState( addressRequest.getState() );
-        address.setCountry( addressRequest.getCountry() );
-        address.setPincode( addressRequest.getPincode() );
+        address.setStreet(addressRequest.getStreet());
+        address.setCity(addressRequest.getCity());
+        address.setState(addressRequest.getState());
+        address.setCountry(addressRequest.getCountry());
+        address.setPincode(addressRequest.getPincode());
 
         return address;
     }
 
     public AddressResponse convertToAddressResponse(Address address) {
-        if ( address == null ) {
+        if (address == null) {
             return null;
         }
 
         AddressResponse addressResponse = new AddressResponse();
 
-        addressResponse.setId( address.getId() );
-        addressResponse.setStreet( address.getStreet() );
-        addressResponse.setCity( address.getCity() );
-        addressResponse.setState( address.getState() );
-        addressResponse.setPincode( address.getPincode() );
-        addressResponse.setCountry( address.getCountry() );
+        addressResponse.setId(address.getId());
+        addressResponse.setStreet(address.getStreet());
+        addressResponse.setCity(address.getCity());
+        addressResponse.setState(address.getState());
+        addressResponse.setPincode(address.getPincode());
+        addressResponse.setCountry(address.getCountry());
 
         return addressResponse;
     }
-
 }
