@@ -33,6 +33,6 @@ public class UserDetailServices implements UserDetailsService {
         if (user.isEmpty()) {
             throw new NotFoundException("User With this email not exist", HttpStatus.NOT_FOUND);
         }
-        return new UserPrincipal(user.get().getId(), user.get().getEmail(),user.get().getPassword());
+        return new UserPrincipal(user.get().getId(), user.get().getEmail(), user.get().getPassword());
     }
 }
