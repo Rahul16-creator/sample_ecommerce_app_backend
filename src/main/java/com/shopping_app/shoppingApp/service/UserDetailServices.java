@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 /*
- * Separated this change in separate file , reason not able to add it in userservie class it creating circular dependency issue
+ * Separated this change in this file , reason not able to add it in userservie class it creating circular dependency issue
  * ex:
  *  JwtTokenProvider uses userservice
  *  userservice uses JwtTokenprovider
