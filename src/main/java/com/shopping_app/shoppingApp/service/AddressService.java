@@ -3,7 +3,6 @@ package com.shopping_app.shoppingApp.service;
 import com.shopping_app.shoppingApp.Exceptions.NotFoundException;
 import com.shopping_app.shoppingApp.domain.Address;
 import com.shopping_app.shoppingApp.domain.User;
-import com.shopping_app.shoppingApp.mapping.AddressMapper;
 import com.shopping_app.shoppingApp.model.Address.Request.AddressRequest;
 import com.shopping_app.shoppingApp.model.Address.Response.AddressResponse;
 import com.shopping_app.shoppingApp.repository.AddressRepository;
@@ -23,15 +22,14 @@ public class AddressService {
 
     private final AddressRepository addressRepository;
     private final UserService userService;
-    private final AddressMapper addressMapper;
 
     public AddressResponse addAddress(AddressRequest addressRequest) {
         UserPrincipal principal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Address address = addressMapper.convertToAddress(addressRequest);
+        Address address = convertToAddress(addressRequest);
         User user = userService.fetchUserById(principal.getId());
         address.setUser(user);
         Address saveAddress = addressRepository.save(address);
-        return addressMapper.convertToAddressResponse(saveAddress);
+        return convertToAddressResponse(saveAddress);
     }
 
     public AddressResponse updateAddress(AddressRequest addressRequest, Long id) {
@@ -42,13 +40,13 @@ public class AddressService {
         address.setCity(addressRequest.getCity());
         address.setPincode(addressRequest.getPincode());
         Address updatedAddress = addressRepository.save(address);
-        return addressMapper.convertToAddressResponse(updatedAddress);
+        return convertToAddressResponse(updatedAddress);
     }
 
     public AddressResponse deleteAddress(Long id) {
         Address address = fetchAddressById(id);
         addressRepository.deleteById(id);
-        return addressMapper.convertToAddressResponse(address);
+        return convertToAddressResponse(address);
     }
 
     public Address fetchAddressById(Long id) {
@@ -58,4 +56,38 @@ public class AddressService {
         }
         return isAddressExist.get();
     }
+
+    public Address convertToAddress(AddressRequest addressRequest) {
+        if ( addressRequest == null ) {
+            return null;
+        }
+
+        Address address = new Address();
+
+        address.setStreet( addressRequest.getStreet() );
+        address.setCity( addressRequest.getCity() );
+        address.setState( addressRequest.getState() );
+        address.setCountry( addressRequest.getCountry() );
+        address.setPincode( addressRequest.getPincode() );
+
+        return address;
+    }
+
+    public AddressResponse convertToAddressResponse(Address address) {
+        if ( address == null ) {
+            return null;
+        }
+
+        AddressResponse addressResponse = new AddressResponse();
+
+        addressResponse.setId( address.getId() );
+        addressResponse.setStreet( address.getStreet() );
+        addressResponse.setCity( address.getCity() );
+        addressResponse.setState( address.getState() );
+        addressResponse.setPincode( address.getPincode() );
+        addressResponse.setCountry( address.getCountry() );
+
+        return addressResponse;
+    }
+
 }

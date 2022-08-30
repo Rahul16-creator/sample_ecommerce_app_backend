@@ -11,21 +11,22 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor(onConstructor = @__({@Autowired}))
-public class UserDetailsServiceImpl implements UserDetailsService {
+public class UserDetailServices implements UserDetailsService {
+
+    private final UserRepository userRepository;
 
 
-	private final UserRepository userRepository;
-
-	@Override
-	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-		Optional<User> user = userRepository.findByEmail(email);
-		if (user.isEmpty()) {
-			throw new NotFoundException("User With this email not exist", HttpStatus.NOT_FOUND);
-		}
-		return new UserPrincipal(user.get().getId(), user.get().getEmail(),user.get().getPassword());
-	}
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Optional<User> user = userRepository.findByEmail(email);
+        if (user.isEmpty()) {
+            throw new NotFoundException("User With this email not exist", HttpStatus.NOT_FOUND);
+        }
+        return new UserPrincipal(user.get().getId(), user.get().getEmail(),user.get().getPassword());
+    }
 }

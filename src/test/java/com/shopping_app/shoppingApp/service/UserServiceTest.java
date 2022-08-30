@@ -4,8 +4,6 @@ import com.shopping_app.shoppingApp.Exceptions.NotFoundException;
 import com.shopping_app.shoppingApp.Exceptions.UserAlreadyExist;
 import com.shopping_app.shoppingApp.config.JWT.JwtTokenProvider;
 import com.shopping_app.shoppingApp.domain.User;
-import com.shopping_app.shoppingApp.mapping.UserMapper;
-import com.shopping_app.shoppingApp.mapping.UserMapperImpl;
 import com.shopping_app.shoppingApp.model.User.Request.UserLoginRequest;
 import com.shopping_app.shoppingApp.model.User.Request.UserRegisterRequest;
 import com.shopping_app.shoppingApp.model.User.Request.UserUpdateRequest;
@@ -25,7 +23,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.Optional;
 
@@ -33,7 +30,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -65,20 +61,12 @@ public class UserServiceTest {
     @Mock
     private Authentication authentication;
 
-    @Mock
-    private UserMapper userMapper;
-
-    private UserMapperImpl userMapperImpl = new UserMapperImpl();
 
     @Test
     public void testRegisterUserSuccess() {
         UserRegisterRequest request = MockPayload.getUserRegisterMockRequestPayload();
-        User user = userMapperImpl.convertToUserDomain(request);
-        UserResponse userResponse = userMapperImpl.convertToUserResponse(user);
         when(userRepository.findByEmail(any(String.class))).thenReturn(Optional.empty());
         when(userRepository.save(any())).thenReturn(MockPayload.getUserMockdata());
-        when(userMapper.convertToUserDomain(any(UserRegisterRequest.class))).thenReturn(user);
-        when(userMapper.convertToUserResponse(any(User.class))).thenReturn(userResponse);
         UserResponse response = userService.registerUser(request);
         assertNotNull(response);
         verify(userRepository, Mockito.times(1)).save(any(User.class));
@@ -97,7 +85,7 @@ public class UserServiceTest {
         UserLoginRequest userLoginMockRequestPayload = MockPayload.getUserLoginMockRequestPayload();
         when(authenticationManager.authenticate(any())).thenReturn(authentication);
         when(tokenProvider.createToken(any())).thenReturn(token);
-        when(userMapper.convertToUserLoginResponse(any(UserLoginRequest.class), eq(token))).thenReturn(MockPayload.getUserLoginMockResponsePayload());
+//        when(userMapper.convertToUserLoginResponse(any(UserLoginRequest.class), eq(token))).thenReturn(MockPayload.getUserLoginMockResponsePayload());
         UserLoginResponse userLoginResponse = userService.loginUser(userLoginMockRequestPayload);
         assertNotNull(userLoginResponse.getToken());
     }
@@ -111,9 +99,7 @@ public class UserServiceTest {
     @Test
     public void testUserFindByIdSuccess() {
         User userMockdata = MockPayload.getUserMockdata();
-        UserResponse user = userMapperImpl.convertToUserResponse(userMockdata);
         when(userRepository.findById(any())).thenReturn(Optional.ofNullable(userMockdata));
-        when(userMapper.convertToUserResponse(any())).thenReturn(user);
         UserResponse userById = userService.getUserById(1L);
         assertEquals(userById.getEmail(), "test@gmail.com");
     }
@@ -121,11 +107,9 @@ public class UserServiceTest {
     @Test
     public void testUserUpdateProfileSuccess() {
         User userMockdata = MockPayload.getUserMockdata();
-        UserResponse user = userMapperImpl.convertToUserResponse(userMockdata);
         UserUpdateRequest userUpdateRequest = MockPayload.getUserUpdateMockRequestPayload();
         when(userRepository.findById(any())).thenReturn(Optional.ofNullable(userMockdata));
         when(userRepository.save(any())).thenReturn(MockPayload.getUserMockdata());
-        when(userMapper.convertToUserResponse(any())).thenReturn(user);
         UserResponse userResponse = userService.updateUserById(userUpdateRequest, 1L);
         assertNotNull(userResponse);
     }

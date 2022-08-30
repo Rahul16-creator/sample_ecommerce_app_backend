@@ -4,6 +4,7 @@ import java.util.Base64;
 import java.util.Date;
 import javax.annotation.PostConstruct;
 
+import com.shopping_app.shoppingApp.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 @Slf4j
 public class JwtTokenProvider {
 
-    private final UserDetailsService userDetailsService;
+    private final UserDetailsService userDetailService;
 
     @Value("${jwt.secret-key}")
     private String secretKey;
@@ -44,9 +45,10 @@ public class JwtTokenProvider {
 
     public Authentication getAuthentication(String token) {
         String email = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
-        UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+        UserDetails userDetails = userDetailService.loadUserByUsername(email);
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
+
 
     public boolean validateToken(String token) {
         Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
