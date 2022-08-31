@@ -1,0 +1,1 @@
+ALTER TABLE `product` MODIFY price DECIMAL(10,2);
