@@ -51,14 +51,14 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    @PreAuthorize("@authenticationService.isAuthenticate(#userId)")
+    @PreAuthorize("@accessControlService.isAuthenticate(#userId)")
     public ResponseEntity<ApiResponse> getUserById(@PathVariable Long userId) {
         UserResponse user = userService.getUserFromId(userId);
         return new ResponseEntity<>(getResponse("User Fetched Successfully", user), HttpStatus.OK);
     }
 
     @PutMapping("/{userId}")
-    @PreAuthorize("@authenticationService.isAuthenticate(#userId)")
+    @PreAuthorize("@accessControlService.isAuthenticate(#userId)")
     public ResponseEntity<ApiResponse> updateUserById(@Valid @RequestBody UserUpdateRequest userProfileUpdateRequest, @PathVariable Long userId) {
         UserResponse user = userService.updateUserById(userProfileUpdateRequest, userId);
         return new ResponseEntity<>(getResponse("Users Profile Updated Successfully!!", user), HttpStatus.OK);
