@@ -25,9 +25,7 @@ public class ProductResponse {
     private int availableQuantity;
 
     public static ProductResponse from(Product product) {
-        if (product == null) {
-            return null;
-        }
+
         return ProductResponse.builder()
                 .id(product.getId())
                 .productPrice(product.getPrice())

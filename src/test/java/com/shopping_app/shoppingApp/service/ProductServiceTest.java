@@ -39,7 +39,7 @@ public class ProductServiceTest {
         try {
             productService.getProductById(-1L);
         } catch (NotFoundException ex) {
-            assertEquals("Product Not Found in our database Please check product Id", ex.getMessage());
+            assertEquals("Product not found", ex.getMessage());
             assertEquals(HttpStatus.NOT_FOUND, ex.getHttpStatus());
         }
     }

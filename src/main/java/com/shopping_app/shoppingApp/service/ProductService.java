@@ -29,7 +29,7 @@ public class ProductService {
     public ProductResponse getProductById(Long id) {
         Optional<Product> product = productRepository.findById(id);
         if (product.isEmpty()) {
-            throw new NotFoundException("Product Not Found in our database Please check product Id", HttpStatus.NOT_FOUND);
+            throw new NotFoundException("Product not found", HttpStatus.NOT_FOUND);
         }
         return ProductResponse.from(product.get());
     }

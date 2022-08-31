@@ -36,7 +36,7 @@ public class ProductControllerTest extends AbstractControllerTest {
 
         ResponseEntity<ApiResponse> response2 = httpCall("/products/100", HttpMethod.GET, entity, ApiResponse.class);
         assertEquals(HttpStatus.NOT_FOUND.value(), response2.getStatusCodeValue());
-        assertEquals("Product Not Found in our database Please check product Id", response2.getBody().getMessage());
+        assertEquals("Product not found", response2.getBody().getMessage());
 
         ResponseEntity<ApiResponse> response3 = httpCall("/products", HttpMethod.GET, null, ApiResponse.class);
         assertEquals(HttpStatus.UNAUTHORIZED.value(), response3.getStatusCodeValue());

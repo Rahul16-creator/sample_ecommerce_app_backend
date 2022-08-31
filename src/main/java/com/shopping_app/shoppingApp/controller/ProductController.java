@@ -4,6 +4,7 @@ import com.shopping_app.shoppingApp.model.AbstractClass.ApiResponse;
 import com.shopping_app.shoppingApp.model.Enum.ResponseType;
 import com.shopping_app.shoppingApp.model.Product.ProductResponse;
 import com.shopping_app.shoppingApp.service.ProductService;
+import com.shopping_app.shoppingApp.utils.ResponseUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,21 +26,13 @@ public class ProductController {
     @GetMapping
     public ResponseEntity<ApiResponse> getAllProducts() {
         List<ProductResponse> productResponse = productService.getAllProducts();
-        return new ResponseEntity<>(getResponse("All the Products Fetched Successfully", productResponse), HttpStatus.OK);
+        return new ResponseEntity<>(ResponseUtil.createResponse("All the Products Fetched Successfully", productResponse, HttpStatus.OK), HttpStatus.OK);
     }
 
     @GetMapping("/{productId}")
     public ResponseEntity<ApiResponse> getProductById(@PathVariable Long productId) {
         ProductResponse productResponse = productService.getProductById(productId);
-        return new ResponseEntity<>(getResponse("Product Fetched Successfully", productResponse), HttpStatus.OK);
+        return new ResponseEntity<>(ResponseUtil.createResponse("Product Fetched Successfully", productResponse, HttpStatus.OK), HttpStatus.OK);
     }
 
-    public ApiResponse getResponse(String message, Object data) {
-        return ApiResponse.builder()
-                .data(data)
-                .code(HttpStatus.OK)
-                .message(message)
-                .status(ResponseType.SUCCESS)
-                .build();
-    }
 }
