@@ -5,6 +5,7 @@ import com.shopping_app.shoppingApp.model.Address.AddressRequest;
 import com.shopping_app.shoppingApp.model.Address.AddressResponse;
 import com.shopping_app.shoppingApp.model.AbstractClass.ApiResponse;
 import com.shopping_app.shoppingApp.service.AddressService;
+import com.shopping_app.shoppingApp.utils.ResponseUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,16 +30,14 @@ public class AddressController {
     @PreAuthorize("@accessControlService.isAuthenticate(#userId)")
     public ResponseEntity<ApiResponse> addAddress(@PathVariable Long userId, @Valid @RequestBody AddressRequest addressRequest) {
         AddressResponse addressResponse = addressService.addAddress(addressRequest, userId);
-        ApiResponse<AddressResponse> Response = new ApiResponse<AddressResponse>(HttpStatus.CREATED, "Address added Successfully", ResponseType.SUCCESS, addressResponse);
-        return new ResponseEntity<>(Response, Response.getCode());
+        return new ResponseEntity<>(ResponseUtil.createResponse("Address added Successfully", addressResponse, HttpStatus.CREATED), HttpStatus.CREATED);
     }
 
     @PutMapping("/user/{userId}/address/{addressId}")
     @PreAuthorize("@accessControlService.isAuthenticate(#userId)")
     public ResponseEntity<ApiResponse> updateAddress(@PathVariable Long userId, @Valid @RequestBody AddressRequest addressRequest, @PathVariable Long addressId) {
         AddressResponse addressResponse = addressService.updateAddress(addressRequest, userId, addressId);
-        ApiResponse<AddressResponse> Response = new ApiResponse<AddressResponse>(HttpStatus.OK, "Address updated Successfully", ResponseType.SUCCESS, addressResponse);
-        return new ResponseEntity<>(Response, Response.getCode());
+        return new ResponseEntity<>(ResponseUtil.createResponse("Address updated Successfully", addressResponse, HttpStatus.OK), HttpStatus.OK);
     }
 
     @DeleteMapping("/user/{userId}/address/{addressId}")

@@ -8,6 +8,7 @@ import com.shopping_app.shoppingApp.model.AbstractClass.ApiResponse;
 import com.shopping_app.shoppingApp.model.User.UserLoginResponse;
 import com.shopping_app.shoppingApp.model.User.UserResponse;
 import com.shopping_app.shoppingApp.service.UserService;
+import com.shopping_app.shoppingApp.utils.ResponseUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,41 +36,33 @@ public class UserController {
     @GetMapping
     public ResponseEntity<ApiResponse> fetchAllUser() {
         List<UserResponse> users = userService.getAllUsers();
-        return new ResponseEntity<>(getResponse("All Users Fetched Successfully", users), HttpStatus.OK);
+        return new ResponseEntity<>(ResponseUtil.createResponse("All Users Fetched Successfully", users, HttpStatus.OK), HttpStatus.OK);
     }
 
     @PostMapping("/register")
     public ResponseEntity<ApiResponse> registerUser(@Valid @RequestBody UserRegisterRequest userRegisterRequest) {
         UserResponse user = userService.registerUser(userRegisterRequest);
-        return new ResponseEntity<>(getResponse("Users Registered Successfully!!", user), HttpStatus.CREATED);
+        return new ResponseEntity<>(ResponseUtil.createResponse("Users Registered Successfully!!", user, HttpStatus.CREATED), HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
     public ResponseEntity<ApiResponse> loginUser(@Valid @RequestBody UserLoginRequest userLoginRequest) {
         UserLoginResponse user = userService.loginUser(userLoginRequest);
-        return new ResponseEntity<>(getResponse("Users Logged In Successfully!!", user), HttpStatus.OK);
+        return new ResponseEntity<>(ResponseUtil.createResponse("Users Logged In Successfully!!", user, HttpStatus.OK), HttpStatus.OK);
     }
 
     @GetMapping("/{userId}")
     @PreAuthorize("@accessControlService.isAuthenticate(#userId)")
     public ResponseEntity<ApiResponse> getUserById(@PathVariable Long userId) {
         UserResponse user = userService.getUserFromId(userId);
-        return new ResponseEntity<>(getResponse("User Fetched Successfully", user), HttpStatus.OK);
+        return new ResponseEntity<>(ResponseUtil.createResponse("User Fetched Successfully", user, HttpStatus.OK), HttpStatus.OK);
     }
 
     @PutMapping("/{userId}")
     @PreAuthorize("@accessControlService.isAuthenticate(#userId)")
     public ResponseEntity<ApiResponse> updateUserById(@Valid @RequestBody UserUpdateRequest userProfileUpdateRequest, @PathVariable Long userId) {
         UserResponse user = userService.updateUserById(userProfileUpdateRequest, userId);
-        return new ResponseEntity<>(getResponse("Users Profile Updated Successfully!!", user), HttpStatus.OK);
+        return new ResponseEntity<>(ResponseUtil.createResponse("Users Profile Updated Successfully!!", user, HttpStatus.OK), HttpStatus.OK);
     }
 
-    public ApiResponse getResponse(String message, Object data) {
-        return ApiResponse.builder()
-                .data(data)
-                .code(HttpStatus.OK)
-                .message(message)
-                .status(ResponseType.SUCCESS)
-                .build();
-    }
 }

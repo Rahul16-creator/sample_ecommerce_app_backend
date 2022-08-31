@@ -14,14 +14,14 @@ import javax.persistence.Entity;
 @NoArgsConstructor
 @Getter
 @Setter
-@EqualsAndHashCode(callSuper=false)
+@EqualsAndHashCode(callSuper = false)
 public class Product extends BaseEntity {
 
     @Column(name = "product_name", nullable = false)
     private String productName;
 
     @Column(nullable = false)
-    private Float price;
+    private double price;
 
     private String description;
 
