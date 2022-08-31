@@ -43,13 +43,13 @@ public class ExceptionController {
 
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<ApiResponse> handleAuthException(AuthenticationException ex) {
-        ApiResponse apiResponse = new ApiResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.UNAUTHORIZED, ex.getMessage());
         return new ResponseEntity<>(apiResponse, HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<ApiResponse> handleAuthException(AccessDeniedException ex) {
-        ApiResponse apiResponse = new ApiResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+    public ResponseEntity<ApiResponse> handleAccessDeniedException(AccessDeniedException ex) {
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.FORBIDDEN, ex.getMessage());
         return new ResponseEntity<>(apiResponse, HttpStatus.FORBIDDEN);
     }
 
