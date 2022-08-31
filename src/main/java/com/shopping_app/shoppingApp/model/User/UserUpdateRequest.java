@@ -1,4 +1,4 @@
-package com.shopping_app.shoppingApp.model.User.Request;
+package com.shopping_app.shoppingApp.model.User;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,9 +16,6 @@ public class UserUpdateRequest {
 
     @NotBlank
     private String name;
-
-    @NotBlank
-    private String email;
 
     @NotBlank
     private String phoneNumber;

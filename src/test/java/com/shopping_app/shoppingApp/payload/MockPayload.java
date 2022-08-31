@@ -2,11 +2,11 @@ package com.shopping_app.shoppingApp.payload;
 
 import com.shopping_app.shoppingApp.domain.Address;
 import com.shopping_app.shoppingApp.domain.User;
-import com.shopping_app.shoppingApp.model.Address.Request.AddressRequest;
-import com.shopping_app.shoppingApp.model.User.Request.UserLoginRequest;
-import com.shopping_app.shoppingApp.model.User.Request.UserRegisterRequest;
-import com.shopping_app.shoppingApp.model.User.Request.UserUpdateRequest;
-import com.shopping_app.shoppingApp.model.User.Response.UserLoginResponse;
+import com.shopping_app.shoppingApp.model.Address.AddressRequest;
+import com.shopping_app.shoppingApp.model.Enum.UserRole;
+import com.shopping_app.shoppingApp.model.User.UserLoginRequest;
+import com.shopping_app.shoppingApp.model.User.UserRegisterRequest;
+import com.shopping_app.shoppingApp.model.User.UserUpdateRequest;
 
 public class MockPayload {
     public static AddressRequest getAddressRequestPayload() {
@@ -42,10 +42,11 @@ public class MockPayload {
 
     public static User getUserMockdata() {
         User user = new User();
-        user.setId(1L);
         user.setName("test");
         user.setEmail("test@gmail.com");
+        user.setPassword("12345");
         user.setPhoneNumber("9876543211");
+        user.setRoleName(UserRole.CUSTOMER);
         return user;
     }
 
@@ -65,14 +66,7 @@ public class MockPayload {
         return request;
     }
 
-    public static UserLoginResponse getUserLoginMockResponsePayload() {
-        UserLoginResponse userResponse = new UserLoginResponse();
-        userResponse.setEmail("test@gmail.com");
-        userResponse.setToken("9876543211");
-        return userResponse;
-    }
-
     public static UserUpdateRequest getUserUpdateMockRequestPayload() {
-        return UserUpdateRequest.builder().name("test").email("test@gmail.com").phoneNumber("123456").build();
+        return UserUpdateRequest.builder().name("test").phoneNumber("123456").build();
     }
 }

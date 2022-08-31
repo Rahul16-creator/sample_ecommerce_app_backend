@@ -18,7 +18,7 @@ import java.time.LocalDate;
 
 @Entity
 @Getter
-@Table(name="`Order`")
+@Table(name = "`Order`")
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor

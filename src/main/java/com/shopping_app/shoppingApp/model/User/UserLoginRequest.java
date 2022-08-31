@@ -1,4 +1,4 @@
-package com.shopping_app.shoppingApp.model.User.Request;
+package com.shopping_app.shoppingApp.model.User;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,124 +1,88 @@
 package com.shopping_app.shoppingApp.service;
 
-import com.shopping_app.shoppingApp.Exceptions.NotFoundException;
 import com.shopping_app.shoppingApp.Exceptions.UserAlreadyExist;
-import com.shopping_app.shoppingApp.config.JWT.JwtTokenProvider;
-import com.shopping_app.shoppingApp.domain.User;
-import com.shopping_app.shoppingApp.model.User.Request.UserLoginRequest;
-import com.shopping_app.shoppingApp.model.User.Request.UserRegisterRequest;
-import com.shopping_app.shoppingApp.model.User.Request.UserUpdateRequest;
-import com.shopping_app.shoppingApp.model.User.Response.UserLoginResponse;
-import com.shopping_app.shoppingApp.model.User.Response.UserResponse;
+import com.shopping_app.shoppingApp.model.User.UserLoginRequest;
+import com.shopping_app.shoppingApp.model.User.UserLoginResponse;
+import com.shopping_app.shoppingApp.model.User.UserRegisterRequest;
+import com.shopping_app.shoppingApp.model.User.UserResponse;
 import com.shopping_app.shoppingApp.payload.MockPayload;
-import com.shopping_app.shoppingApp.repository.AddressRepository;
-import com.shopping_app.shoppingApp.repository.CartRepository;
-import com.shopping_app.shoppingApp.repository.UserRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.util.Optional;
+import org.springframework.http.HttpStatus;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
 @SpringBootTest
-public class UserServiceTest {
+@RunWith(SpringJUnit4ClassRunner.class)
+public class UserServiceTest extends AbstractServiceTest {
 
-    @Mock
-    private UserRepository userRepository;
-
-    @Mock
-    private AddressRepository addressRepository;
-
-    @Mock
-    private CartRepository cartRepository;
-
-    @InjectMocks
+    @Autowired
     private UserService userService;
 
-    @Mock
-    private PasswordEncoder bCryptPasswordEncoder;
-
-    @Mock
-    private JwtTokenProvider tokenProvider;
-
-    @Mock
-    private AuthenticationManager authenticationManager;
-
-    @Mock
-    private Authentication authentication;
-
-
     @Test
-    public void testRegisterUserSuccess() {
-        UserRegisterRequest request = MockPayload.getUserRegisterMockRequestPayload();
-        when(userRepository.findByEmail(any(String.class))).thenReturn(Optional.empty());
-        when(userRepository.save(any())).thenReturn(MockPayload.getUserMockdata());
-        UserResponse response = userService.registerUser(request);
-        assertNotNull(response);
-        verify(userRepository, Mockito.times(1)).save(any(User.class));
+    public void testUserRegisterSuccess() {
+        UserRegisterRequest userRegisterRequest = MockPayload.getUserRegisterMockRequestPayload();
+        userRegisterRequest.setEmail("xyz@gmail.com");
+        UserResponse userResponse = userService.registerUser(userRegisterRequest);
+        assertEquals(userRegisterRequest.getEmail(), userResponse.getEmail());
     }
 
     @Test
-    public void testRegisterUserFailure() {
-        UserRegisterRequest request = MockPayload.getUserRegisterMockRequestPayload();
-        when(userRepository.findByEmail(any())).thenThrow(UserAlreadyExist.class);
-        assertThrows(UserAlreadyExist.class, () -> userService.registerUser(request));
+    public void testUserRegisterFailure() {
+        UserRegisterRequest userRegisterRequest = MockPayload.getUserRegisterMockRequestPayload();
+        try {
+            userService.registerUser(userRegisterRequest);
+        } catch (UserAlreadyExist ex) {
+            assertEquals("User with this email Already exist", ex.getMessage());
+            assertEquals(HttpStatus.BAD_REQUEST, ex.getHttpStatus());
+        }
     }
 
     @Test
-    public void testUserLogin() {
-        String token = "7423672436737623";
-        UserLoginRequest userLoginMockRequestPayload = MockPayload.getUserLoginMockRequestPayload();
-        when(authenticationManager.authenticate(any())).thenReturn(authentication);
-        when(tokenProvider.createToken(any())).thenReturn(token);
-//        when(userMapper.convertToUserLoginResponse(any(UserLoginRequest.class), eq(token))).thenReturn(MockPayload.getUserLoginMockResponsePayload());
-        UserLoginResponse userLoginResponse = userService.loginUser(userLoginMockRequestPayload);
+    public void testUserLoginSuccess() {
+        UserLoginRequest userLoginRequest = MockPayload.getUserLoginMockRequestPayload();
+        UserLoginResponse userLoginResponse = userService.loginUser(userLoginRequest);
         assertNotNull(userLoginResponse.getToken());
+        assertEquals(userLoginRequest.getEmail(), userLoginResponse.getEmail());
     }
 
     @Test
-    public void testUserFindByIdFailure() {
-        when(userRepository.findById(any())).thenReturn(Optional.empty());
-        assertThrows(NotFoundException.class, () -> userService.getUserById(1L));
+    public void testUserLoginFailure_NOT_FOUND() {
+        UserLoginRequest userLoginRequest = MockPayload.getUserLoginMockRequestPayload();
+        userLoginRequest.setEmail("xyz@gmail.com");
+        try {
+            userService.loginUser(userLoginRequest);
+        } catch (Exception ex) {
+            assertEquals("User With this email not exist", ex.getMessage());
+        }
     }
 
     @Test
-    public void testUserFindByIdSuccess() {
-        User userMockdata = MockPayload.getUserMockdata();
-        when(userRepository.findById(any())).thenReturn(Optional.ofNullable(userMockdata));
-        UserResponse userById = userService.getUserById(1L);
-        assertEquals(userById.getEmail(), "test@gmail.com");
+    public void testUserLoginFailure_WRONG_CREDENTIALS() {
+        UserLoginRequest userLoginRequest = MockPayload.getUserLoginMockRequestPayload();
+        userLoginRequest.setPassword("12345");
+        try {
+            userService.loginUser(userLoginRequest);
+        } catch (Exception ex) {
+            assertEquals("Bad credentials", ex.getMessage());
+        }
     }
 
     @Test
-    public void testUserUpdateProfileSuccess() {
-        User userMockdata = MockPayload.getUserMockdata();
-        UserUpdateRequest userUpdateRequest = MockPayload.getUserUpdateMockRequestPayload();
-        when(userRepository.findById(any())).thenReturn(Optional.ofNullable(userMockdata));
-        when(userRepository.save(any())).thenReturn(MockPayload.getUserMockdata());
-        UserResponse userResponse = userService.updateUserById(userUpdateRequest, 1L);
+    public void testUserGetUserById() {
+        UserResponse userResponse = userService.getUserById(userId);
         assertNotNull(userResponse);
+        assertEquals(MockPayload.getUserMockdata().getEmail(), userResponse.getEmail());
     }
 
     @Test
-    public void testUserUpdateProfileFailure() {
-        UserUpdateRequest userUpdateRequest = MockPayload.getUserUpdateMockRequestPayload();
-        when(userRepository.findById(any())).thenReturn(Optional.empty());
-        assertThrows(NotFoundException.class, () -> userService.updateUserById(userUpdateRequest, -1L));
+    public void testUserUpdate() {
+        UserResponse userResponse = userService.updateUserById(MockPayload.getUserUpdateMockRequestPayload(), userId);
+        assertNotNull(userResponse);
+        assertEquals(MockPayload.getUserUpdateMockRequestPayload().getPhoneNumber(), userResponse.getPhoneNumber());
     }
-
 }

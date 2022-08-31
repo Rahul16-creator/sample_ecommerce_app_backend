@@ -13,7 +13,7 @@ import javax.persistence.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CartItems extends BaseEntity{
+public class CartItems extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "cart_id")

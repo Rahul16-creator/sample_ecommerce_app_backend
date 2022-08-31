@@ -1,7 +1,7 @@
-package com.shopping_app.shoppingApp.model.User.Request;
+package com.shopping_app.shoppingApp.model.User;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.shopping_app.shoppingApp.domain.Address;
+import com.shopping_app.shoppingApp.model.Address.AddressRequest;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,5 +29,5 @@ public class UserRegisterRequest {
     @NotBlank
     private String password;
     
-    private Set<Address> address;
+    private Set<AddressRequest> address;
 }

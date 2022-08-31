@@ -1,6 +1,6 @@
 package com.shopping_app.shoppingApp.service;
 
-import com.shopping_app.shoppingApp.Exceptions.NotFoundException;
+import com.shopping_app.shoppingApp.Exceptions.BaseException;
 import com.shopping_app.shoppingApp.domain.User;
 import com.shopping_app.shoppingApp.repository.UserRepository;
 import com.shopping_app.shoppingApp.utils.UserPrincipal;
@@ -31,7 +31,7 @@ public class UserDetailServices implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Optional<User> user = userRepository.findByEmail(email);
         if (user.isEmpty()) {
-            throw new NotFoundException("User With this email not exist", HttpStatus.NOT_FOUND);
+            throw new BaseException("User With this email not exist", HttpStatus.UNAUTHORIZED);
         }
         return new UserPrincipal(user.get().getId(), user.get().getEmail(), user.get().getPassword());
     }

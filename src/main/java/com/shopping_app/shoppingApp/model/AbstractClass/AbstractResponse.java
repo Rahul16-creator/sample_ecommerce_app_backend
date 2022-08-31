@@ -1,4 +1,4 @@
-package com.shopping_app.shoppingApp.model.AbstractClass.Response;
+package com.shopping_app.shoppingApp.model.AbstractClass;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.shopping_app.shoppingApp.model.Enum.ResponseType;

@@ -1,10 +1,9 @@
 package com.shopping_app.shoppingApp.controller;
 
-import com.shopping_app.shoppingApp.model.AbstractClass.Response.ApiResponse;
-import com.shopping_app.shoppingApp.model.User.Request.UserRegisterRequest;
+import com.shopping_app.shoppingApp.model.AbstractClass.ApiResponse;
+import com.shopping_app.shoppingApp.model.User.UserRegisterRequest;
 import com.shopping_app.shoppingApp.repository.AddressRepository;
 import com.shopping_app.shoppingApp.repository.CartRepository;
-import com.shopping_app.shoppingApp.repository.OrderRepository;
 import com.shopping_app.shoppingApp.repository.UserRepository;
 import org.junit.After;
 import org.junit.Before;
@@ -15,9 +14,11 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 
+import java.util.Map;
+
 import static com.shopping_app.shoppingApp.payload.MockPayload.getUserRegisterMockRequestPayload;
 
-public class AbstractController {
+public class AbstractControllerTest {
 
     public static final String AUTHORIZATION = "Authorization";
 
@@ -35,18 +36,23 @@ public class AbstractController {
     @Autowired
     private CartRepository cartRepository;
 
-    @Autowired
-    private OrderRepository orderRepository;
+    public ResponseEntity<ApiResponse> USER_RESPONSE_ENTITY;
+
 
     @Before
     public void clearUsersDBData() {
-        clearDB();
+        cleanUp();
+        USER_RESPONSE_ENTITY = addUser();
     }
 
     public ResponseEntity<ApiResponse> addUser() {
         UserRegisterRequest userMockRequestPayload = getUserRegisterMockRequestPayload();
         HttpEntity<UserRegisterRequest> entity = getEntity(userMockRequestPayload);
         return httpCall("/user/register", HttpMethod.POST, entity, ApiResponse.class);
+    }
+
+    public Map<String, Object> getResponseObjectData(ResponseEntity<ApiResponse> apiResponseResponseEntity) {
+        return (Map<String, Object>) apiResponseResponseEntity.getBody().getData();
     }
 
     public <T> HttpEntity<T> getEntity(T data) {
@@ -56,6 +62,11 @@ public class AbstractController {
     public <T> HttpEntity<T> getEntity(T data, HttpHeaders httpHeader) {
         return new HttpEntity<>(data, httpHeader);
     }
+
+    public HttpEntity<Object> getEntity(HttpHeaders httpHeader) {
+        return new HttpEntity<>(httpHeader);
+    }
+
 
     public <T, E> ResponseEntity<T> httpCall(String url, HttpMethod httpMethod, HttpEntity<E> entity, Class<T> responseType) {
         return restTemplate.exchange(url, httpMethod, entity, responseType);
@@ -68,9 +79,8 @@ public class AbstractController {
     }
 
     @After
-    public void clearDB() {
+    public void cleanUp() {
         cartRepository.deleteAll();
-        orderRepository.deleteAll();
         addressRepository.deleteAll();
         userRepository.deleteAll();
     }

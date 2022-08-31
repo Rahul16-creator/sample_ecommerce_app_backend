@@ -1,9 +1,10 @@
-package com.shopping_app.shoppingApp.model.Address.Request;
+package com.shopping_app.shoppingApp.model.Address;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 import javax.validation.constraints.NotBlank;
 
 @AllArgsConstructor

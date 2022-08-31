@@ -1,6 +1,6 @@
 package com.shopping_app.shoppingApp.Exceptions;
 
-import com.shopping_app.shoppingApp.model.AbstractClass.Response.ApiResponse;
+import com.shopping_app.shoppingApp.model.AbstractClass.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;

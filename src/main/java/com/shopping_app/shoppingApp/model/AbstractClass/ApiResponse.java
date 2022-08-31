@@ -1,4 +1,4 @@
-package com.shopping_app.shoppingApp.model.AbstractClass.Response;
+package com.shopping_app.shoppingApp.model.AbstractClass;
 
 import com.shopping_app.shoppingApp.model.Enum.ResponseType;
 import lombok.AllArgsConstructor;
@@ -20,7 +20,7 @@ public class ApiResponse<T> extends AbstractResponse {
         super(httpStatus, message);
     }
 
-    public ApiResponse(HttpStatus httpStatus, String message,ResponseType type, T data) {
+    public ApiResponse(HttpStatus httpStatus, String message, ResponseType type, T data) {
         super(type, message, httpStatus);
         this.data = data;
     }

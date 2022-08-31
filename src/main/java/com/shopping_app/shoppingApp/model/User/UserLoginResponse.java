@@ -1,4 +1,4 @@
-package com.shopping_app.shoppingApp.model.User.Response;
+package com.shopping_app.shoppingApp.model.User;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
@@ -18,4 +18,12 @@ public class UserLoginResponse {
     private String email;
 
     private String token;
+
+    public static UserLoginResponse from(UserLoginRequest user, String token) {
+        if (user == null && token == null) {
+            return null;
+        }
+        return UserLoginResponse.builder().email(user.getEmail()).token(token).build();
+    }
+
 }

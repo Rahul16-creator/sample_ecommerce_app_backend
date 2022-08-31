@@ -6,7 +6,6 @@ DROP TABLE IF EXISTS `cart_items`;
 DROP TABLE IF EXISTS `order`;
 DROP TABLE IF EXISTS `order_items`;
 
-
 CREATE TABLE `user`(
    id BIGINT AUTO_INCREMENT,
    name VARCHAR(255) NOT NULL ,
@@ -52,7 +51,6 @@ CREATE TABLE `cart`(
    PRIMARY KEY (`id`)
 ) ;
 
-
 CREATE TABLE `cart_items`(
      id BIGINT AUTO_INCREMENT,
      product_id BIGINT NOT NULL ,
@@ -91,8 +89,3 @@ CREATE TABLE `order_details`(
     CONSTRAINT FK_order_details_order_id FOREIGN KEY (`order_id`) REFERENCES `order`(`id`),
     PRIMARY KEY (`id`)
 ) ;
-
-
-
-
-

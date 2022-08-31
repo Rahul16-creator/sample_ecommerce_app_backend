@@ -1,17 +1,18 @@
 package com.shopping_app.shoppingApp.controller;
 
 import com.shopping_app.shoppingApp.model.Enum.ResponseType;
-import com.shopping_app.shoppingApp.model.User.Request.UserLoginRequest;
-import com.shopping_app.shoppingApp.model.User.Request.UserRegisterRequest;
-import com.shopping_app.shoppingApp.model.User.Request.UserUpdateRequest;
-import com.shopping_app.shoppingApp.model.AbstractClass.Response.ApiResponse;
-import com.shopping_app.shoppingApp.model.User.Response.UserLoginResponse;
-import com.shopping_app.shoppingApp.model.User.Response.UserResponse;
+import com.shopping_app.shoppingApp.model.User.UserLoginRequest;
+import com.shopping_app.shoppingApp.model.User.UserRegisterRequest;
+import com.shopping_app.shoppingApp.model.User.UserUpdateRequest;
+import com.shopping_app.shoppingApp.model.AbstractClass.ApiResponse;
+import com.shopping_app.shoppingApp.model.User.UserLoginResponse;
+import com.shopping_app.shoppingApp.model.User.UserResponse;
 import com.shopping_app.shoppingApp.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,7 +32,7 @@ public class UserController {
     private final UserService userService;
 
     // testing purpose  added this api..
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<ApiResponse> fetchAllUser() {
         List<UserResponse> users = userService.getAllUsers();
         return new ResponseEntity<>(getResponse("All Users Fetched Successfully", users), HttpStatus.OK);
@@ -49,15 +50,17 @@ public class UserController {
         return new ResponseEntity<>(getResponse("Users Logged In Successfully!!", user), HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse> getUserById(@PathVariable Long id) {
-        UserResponse user = userService.getUserById(id);
+    @GetMapping("/{userId}")
+    @PreAuthorize("@authenticationService.isAuthenticate(#userId)")
+    public ResponseEntity<ApiResponse> getUserById(@PathVariable Long userId) {
+        UserResponse user = userService.getUserById(userId);
         return new ResponseEntity<>(getResponse("User Fetched Successfully", user), HttpStatus.OK);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse> updateUserById(@Valid @RequestBody UserUpdateRequest userProfileUpdateRequest, @PathVariable Long id) {
-        UserResponse user = userService.updateUserById(userProfileUpdateRequest, id);
+    @PutMapping("/{userId}")
+    @PreAuthorize("@authenticationService.isAuthenticate(#userId)")
+    public ResponseEntity<ApiResponse> updateUserById(@Valid @RequestBody UserUpdateRequest userProfileUpdateRequest, @PathVariable Long userId) {
+        UserResponse user = userService.updateUserById(userProfileUpdateRequest, userId);
         return new ResponseEntity<>(getResponse("Users Profile Updated Successfully!!", user), HttpStatus.OK);
     }
 

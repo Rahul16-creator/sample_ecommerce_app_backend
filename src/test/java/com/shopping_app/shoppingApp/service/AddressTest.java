@@ -1,91 +1,79 @@
 package com.shopping_app.shoppingApp.service;
 
-import com.shopping_app.shoppingApp.Exceptions.NotFoundException;
+import com.shopping_app.shoppingApp.Exceptions.BaseException;
 import com.shopping_app.shoppingApp.domain.Address;
-import com.shopping_app.shoppingApp.model.Address.Request.AddressRequest;
-import com.shopping_app.shoppingApp.model.Address.Response.AddressResponse;
+import com.shopping_app.shoppingApp.model.Address.AddressRequest;
+import com.shopping_app.shoppingApp.model.Address.AddressResponse;
 import com.shopping_app.shoppingApp.payload.MockPayload;
-import com.shopping_app.shoppingApp.repository.AddressRepository;
-import com.shopping_app.shoppingApp.utils.UserPrincipal;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import java.util.Optional;
+import org.springframework.http.HttpStatus;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
 @SpringBootTest
-public class AddressTest {
+@RunWith(SpringJUnit4ClassRunner.class)
+public class AddressTest extends AbstractServiceTest {
 
-    @Mock
-    private AddressRepository addressRepository;
-
-    @Mock
-    private UserService userService;
-
-    @Mock
-    private UserPrincipal applicationUser;
-
-    @Mock
-    private Authentication authentication;
-
-    @Mock
-    SecurityContext securityContext;
-
-    @InjectMocks
+    @Autowired
     private AddressService addressService;
 
+    private Long addressId;
+
+    @Before
+    public void setUp() {
+        Address address = MockPayload.getAddressMockData();
+        address.setUser(userRepository.findById(userId).get());
+        Address saveAddress = addressRepository.save(address);
+        addressId = saveAddress.getId();
+    }
 
     @Test
     public void testAddAddress() {
-        AddressRequest addressRequestPayload = MockPayload.getAddressRequestPayload();
-        when(securityContext.getAuthentication()).thenReturn(authentication);
-        SecurityContextHolder.setContext(securityContext);
-        when(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).thenReturn(applicationUser);
-        when(userService.fetchUserById(any(Long.class))).thenReturn(MockPayload.getUserMockdata());
-        when(addressRepository.save(any(Address.class))).thenReturn(MockPayload.getAddressMockData());
-        AddressResponse response1 = addressService.addAddress(addressRequestPayload);
-        assertEquals(response1.getCity(), addressRequestPayload.getCity());
+        AddressRequest addressRequest = MockPayload.getAddressRequestPayload();
+        AddressResponse addressResponse = addressService.addAddress(addressRequest, userId);
+        assertNotNull(addressResponse);
+        assertEquals(addressRequest.getCity(), addressResponse.getCity());
     }
 
     @Test
-    public void testUpdateAddressSuccess() {
-        AddressRequest request = MockPayload.getAddressUpdateRequestPayload();
-        when(addressRepository.findById(any(Long.class))).thenReturn(Optional.ofNullable(MockPayload.getAddressMockData()));
-        when(addressRepository.save(any(Address.class))).thenReturn(MockPayload.getAddressMockData());
-        AddressResponse response = addressService.updateAddress(request, 1L);
-        assertNotNull(response);
+    public void testAddressUpdateSuccess() {
+        AddressRequest addressRequest = MockPayload.getAddressUpdateRequestPayload();
+        AddressResponse addressResponse = addressService.updateAddress(addressRequest, userId, addressId);
+        assertNotNull(addressResponse);
+        assertEquals(addressRequest.getStreet(), addressResponse.getStreet());
     }
 
     @Test
-    public void testUpdateAddressFailure() {
-        AddressRequest addressRequestPayload = MockPayload.getAddressRequestPayload();
-        when(addressRepository.findById(any(Long.class))).thenReturn(Optional.empty());
-        assertThrows(NotFoundException.class, () -> addressService.updateAddress(addressRequestPayload, 1L));
+    public void testAddressUpdateFailure() {
+        AddressRequest addressRequest = MockPayload.getAddressUpdateRequestPayload();
+        try {
+            addressService.updateAddress(addressRequest, userId, -100L);
+        } catch (BaseException ex) {
+            assertEquals(HttpStatus.FORBIDDEN, ex.getHttpStatus());
+            assertEquals("Address with this Id Not Found for this user!!", ex.getMessage());
+        }
     }
 
     @Test
-    public void testAddressDeleteSuccess() {
-        when(addressRepository.findById(anyLong())).thenReturn(Optional.ofNullable(MockPayload.getAddressMockData()));
-        AddressResponse response = addressService.deleteAddress(1L);
-        assertNotNull(response);
+    public void testDeleteAddressSuccess() {
+        AddressResponse addressResponse = addressService.deleteAddress(userId, addressId);
+        assertNotNull(addressResponse);
     }
 
     @Test
-    public void testAddressDeleteFailure() {
-        when(addressRepository.findById(anyLong())).thenReturn(Optional.empty());
-        assertThrows(NotFoundException.class, () -> addressService.deleteAddress(1L));
+    public void testDeleteAddressFailure() {
+        try {
+            addressService.deleteAddress(userId, -100L);
+        } catch (BaseException ex) {
+            assertEquals(HttpStatus.FORBIDDEN, ex.getHttpStatus());
+            assertEquals("Address with this Id Not Found for this user!!", ex.getMessage());
+        }
     }
 }
