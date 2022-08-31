@@ -61,11 +61,6 @@ public class AddressTest extends AbstractServiceTest {
         }
     }
 
-    @Test
-    public void testDeleteAddressSuccess() {
-        AddressResponse addressResponse = addressService.deleteAddress(userId, addressId);
-        assertNotNull(addressResponse);
-    }
 
     @Test
     public void testDeleteAddressFailure() {

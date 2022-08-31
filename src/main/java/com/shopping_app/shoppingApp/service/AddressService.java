@@ -24,14 +24,14 @@ public class AddressService {
 
     public AddressResponse addAddress(AddressRequest addressRequest, Long userId) {
         Address address = convertToAddress(addressRequest);
-        User user = userService.fetchUserById(userId);
+        User user = userService.getUserById(userId);
         address.setUser(user);
         Address saveAddress = addressRepository.save(address);
         return AddressResponse.from(saveAddress);
     }
 
     public AddressResponse updateAddress(AddressRequest addressRequest, Long userId, Long addressId) {
-        Address address = fetchAddressById(userId, addressId);
+        Address address = getAddressById(userId, addressId);
         address.setStreet(addressRequest.getStreet());
         address.setState(addressRequest.getState());
         address.setCountry(addressRequest.getCountry());
@@ -41,13 +41,12 @@ public class AddressService {
         return AddressResponse.from(updatedAddress);
     }
 
-    public AddressResponse deleteAddress(Long userId, Long addressId) {
-        Address address = fetchAddressById(userId, addressId);
+    public void deleteAddress(Long userId, Long addressId) {
+        getAddressById(userId, addressId);
         addressRepository.deleteById(addressId);
-        return AddressResponse.from(address);
     }
 
-    public Address fetchAddressById(Long userId, Long id) {
+    public Address getAddressById(Long userId, Long id) {
         Optional<Address> address = addressRepository.findByIdAndUserId(id, userId);
         if (address.isEmpty()) {
             throw new BaseException("Address with this Id Not Found for this user!!", HttpStatus.FORBIDDEN);

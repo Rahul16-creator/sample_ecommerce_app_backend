@@ -24,4 +24,7 @@ public class ApiResponse<T> extends AbstractResponse {
         super(type, message, httpStatus);
         this.data = data;
     }
+    public ApiResponse(HttpStatus httpStatus, String message, ResponseType type) {
+        super(type, message, httpStatus);
+    }
 }

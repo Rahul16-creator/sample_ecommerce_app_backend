@@ -30,12 +30,12 @@ public class AddressControllerTest extends AbstractControllerTest {
     public void testAddAddress() {
         ResponseEntity<ApiResponse> response = addAddress();
         assertEquals("Address added Successfully", response.getBody().getMessage());
-        assertEquals(HttpStatus.OK.value(), response.getStatusCodeValue());
+        assertEquals(HttpStatus.CREATED.value(), response.getStatusCodeValue());
 
         HttpEntity<AddressRequest> entity = getEntity(MockPayload.getAddressRequestPayload(), getHeader());
         ResponseEntity<ApiResponse> response2 = httpCall("/user/100/address", HttpMethod.POST, entity, ApiResponse.class);
         assertEquals(HttpStatus.FORBIDDEN.value(), response2.getStatusCodeValue());
-        assertEquals("User does not have access to this resource", response2.getBody().getMessage());
+        assertEquals("Access is denied", response2.getBody().getMessage());
     }
 
     @Test
@@ -50,7 +50,7 @@ public class AddressControllerTest extends AbstractControllerTest {
 
         ResponseEntity<ApiResponse> response2 = httpCall("/user/100/address/" + addressResponseData.get("id"), HttpMethod.PUT, entity, ApiResponse.class);
         assertEquals(HttpStatus.FORBIDDEN.value(), response2.getStatusCodeValue());
-        assertEquals("User does not have access to this resource", response2.getBody().getMessage());
+        assertEquals("Access is denied", response2.getBody().getMessage());
 
         ResponseEntity<ApiResponse> response3 = httpCall("/user/" + user.get("id") + "/address/100", HttpMethod.PUT, entity, ApiResponse.class);
         assertEquals(HttpStatus.FORBIDDEN.value(), response3.getStatusCodeValue());
@@ -64,15 +64,14 @@ public class AddressControllerTest extends AbstractControllerTest {
         Map<String, Object> addressResponseData = getResponseObjectData(addressResponse);
         HttpEntity<Object> entity = getEntity(getHeader());
         ResponseEntity<ApiResponse> response = httpCall("/user/" + user.get("id") + "/address/" + addressResponseData.get("id"), HttpMethod.DELETE, entity, ApiResponse.class);
-        assertEquals("Address deleted Successfully", response.getBody().getMessage());
-        assertEquals(HttpStatus.OK.value(), response.getStatusCodeValue());
+        assertEquals(HttpStatus.NO_CONTENT.value(), response.getStatusCodeValue());
 
         ResponseEntity<ApiResponse> response2 = httpCall("/user/100/address/" + addressResponseData.get("id"), HttpMethod.DELETE, entity, ApiResponse.class);
-        assertEquals("User does not have access to this resource", response2.getBody().getMessage());
         assertEquals(HttpStatus.FORBIDDEN.value(), response2.getStatusCodeValue());
+        assertEquals("Access is denied", response2.getBody().getMessage());
 
         ResponseEntity<ApiResponse> response3 = httpCall("/user/" + user.get("id") + "/address/100", HttpMethod.DELETE, entity, ApiResponse.class);
         assertEquals(HttpStatus.FORBIDDEN.value(), response3.getStatusCodeValue());
-        assertEquals("Address with this Id Not Found for this user!!", response3.getBody().getMessage());
+        assertEquals("Access is denied", response2.getBody().getMessage());
     }
 }

@@ -75,19 +75,19 @@ public class UserService {
     }
 
     @Transactional
-    public UserResponse getUserById(Long id) {
-        return UserResponse.from(fetchUserById(id));
+    public UserResponse getUserFromId(Long id) {
+        return UserResponse.from(getUserById(id));
     }
 
     public UserResponse updateUserById(UserUpdateRequest userUpdateRequest, Long id) {
-        User user = fetchUserById(id);
+        User user = getUserById(id);
         user.setName(userUpdateRequest.getName());
         user.setPhoneNumber(userUpdateRequest.getPhoneNumber());
         User updatedUser = userRepository.save(user);
         return UserResponse.from(updatedUser);
     }
 
-    public User fetchUserById(Long id) {
+    public User getUserById(Long id) {
         Optional<User> isUserExist = userRepository.findById(id);
         return isUserExist.get();
     }

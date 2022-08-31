@@ -41,7 +41,7 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<ApiResponse> registerUser(@Valid @RequestBody UserRegisterRequest userRegisterRequest) {
         UserResponse user = userService.registerUser(userRegisterRequest);
-        return new ResponseEntity<>(getResponse("Users Registered Successfully!!", user), HttpStatus.OK);
+        return new ResponseEntity<>(getResponse("Users Registered Successfully!!", user), HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
@@ -53,7 +53,7 @@ public class UserController {
     @GetMapping("/{userId}")
     @PreAuthorize("@authenticationService.isAuthenticate(#userId)")
     public ResponseEntity<ApiResponse> getUserById(@PathVariable Long userId) {
-        UserResponse user = userService.getUserById(userId);
+        UserResponse user = userService.getUserFromId(userId);
         return new ResponseEntity<>(getResponse("User Fetched Successfully", user), HttpStatus.OK);
     }
 

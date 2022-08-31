@@ -74,7 +74,7 @@ public class UserServiceTest extends AbstractServiceTest {
 
     @Test
     public void testUserGetUserById() {
-        UserResponse userResponse = userService.getUserById(userId);
+        UserResponse userResponse = userService.getUserFromId(userId);
         assertNotNull(userResponse);
         assertEquals(MockPayload.getUserMockdata().getEmail(), userResponse.getEmail());
     }

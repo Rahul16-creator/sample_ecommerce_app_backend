@@ -25,7 +25,7 @@ public class UserControllerTest extends AbstractControllerTest {
 
     @Test
     public void testUserRegister() {
-        assertEquals(HttpStatus.OK.value(), USER_RESPONSE_ENTITY.getStatusCodeValue());
+        assertEquals(HttpStatus.CREATED.value(), USER_RESPONSE_ENTITY.getStatusCodeValue());
         ResponseEntity<ApiResponse> httpResponse2 = addUser();
         assertEquals(HttpStatus.BAD_REQUEST.value(), httpResponse2.getStatusCodeValue());
         assertEquals("User with this email Already exist", Objects.requireNonNull(httpResponse2.getBody()).getMessage());
@@ -65,7 +65,7 @@ public class UserControllerTest extends AbstractControllerTest {
 
         ResponseEntity<ApiResponse> response2 = httpCall("/user/100", HttpMethod.GET, entity, ApiResponse.class);
         assertEquals(HttpStatus.FORBIDDEN.value(), response2.getStatusCodeValue());
-        assertEquals("User does not have access to this resource", response2.getBody().getMessage());
+        assertEquals("Access is denied", response2.getBody().getMessage());
     }
 
     @Test
@@ -78,6 +78,6 @@ public class UserControllerTest extends AbstractControllerTest {
 
         ResponseEntity<ApiResponse> response2 = httpCall("/user/100", HttpMethod.PUT, entity, ApiResponse.class);
         assertEquals(HttpStatus.FORBIDDEN.value(), response2.getStatusCodeValue());
-        assertEquals("User does not have access to this resource", response2.getBody().getMessage());
+        assertEquals("Access is denied", response2.getBody().getMessage());
     }
 }

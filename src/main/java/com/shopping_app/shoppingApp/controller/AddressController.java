@@ -29,7 +29,7 @@ public class AddressController {
     @PreAuthorize("@authenticationService.isAuthenticate(#userId)")
     public ResponseEntity<ApiResponse> addAddress(@PathVariable Long userId, @Valid @RequestBody AddressRequest addressRequest) {
         AddressResponse addressResponse = addressService.addAddress(addressRequest, userId);
-        ApiResponse<AddressResponse> Response = new ApiResponse<AddressResponse>(HttpStatus.OK, "Address added Successfully", ResponseType.SUCCESS, addressResponse);
+        ApiResponse<AddressResponse> Response = new ApiResponse<AddressResponse>(HttpStatus.CREATED, "Address added Successfully", ResponseType.SUCCESS, addressResponse);
         return new ResponseEntity<>(Response, Response.getCode());
     }
 
@@ -43,9 +43,8 @@ public class AddressController {
 
     @DeleteMapping("/user/{userId}/address/{addressId}")
     @PreAuthorize("@authenticationService.isAuthenticate(#userId)")
-    public ResponseEntity<ApiResponse> deleteAddress(@PathVariable Long userId, @PathVariable Long addressId) {
-        AddressResponse addressResponse = addressService.deleteAddress(userId, addressId);
-        ApiResponse<AddressResponse> Response = new ApiResponse<AddressResponse>(HttpStatus.OK, "Address deleted Successfully", ResponseType.SUCCESS, addressResponse);
-        return new ResponseEntity<>(Response, Response.getCode());
+    public ResponseEntity deleteAddress(@PathVariable Long userId, @PathVariable Long addressId) {
+        addressService.deleteAddress(userId, addressId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
