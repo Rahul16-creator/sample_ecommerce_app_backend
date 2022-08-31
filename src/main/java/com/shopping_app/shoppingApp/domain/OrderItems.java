@@ -1,6 +1,5 @@
 package com.shopping_app.shoppingApp.domain;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,4 +28,3 @@ public class OrderItems extends BaseEntity {
     @Column(nullable = false, name = "total_price")
     private Float totalPrice;
 }
-
