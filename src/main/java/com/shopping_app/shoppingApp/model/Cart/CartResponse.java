@@ -1,7 +1,11 @@
 package com.shopping_app.shoppingApp.model.Cart;
 
 import com.shopping_app.shoppingApp.domain.Cart;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.Set;
 
