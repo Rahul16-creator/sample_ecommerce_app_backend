@@ -27,21 +27,21 @@ public class AddressController {
     private final AddressService addressService;
 
     @PostMapping("/user/{userId}/address")
-    @PreAuthorize("@accessControlService.isAuthenticate(#userId)")
+    @PreAuthorize("@accessControlService.isAuthenticated(#userId)")
     public ResponseEntity<ApiResponse> addAddress(@PathVariable Long userId, @Valid @RequestBody AddressRequest addressRequest) {
         AddressResponse addressResponse = addressService.addAddress(addressRequest, userId);
         return new ResponseEntity<>(ResponseUtil.createResponse("Address added Successfully", addressResponse, HttpStatus.CREATED), HttpStatus.CREATED);
     }
 
     @PutMapping("/user/{userId}/address/{addressId}")
-    @PreAuthorize("@accessControlService.isAuthenticate(#userId)")
+    @PreAuthorize("@accessControlService.isAuthenticated(#userId)")
     public ResponseEntity<ApiResponse> updateAddress(@PathVariable Long userId, @Valid @RequestBody AddressRequest addressRequest, @PathVariable Long addressId) {
         AddressResponse addressResponse = addressService.updateAddress(addressRequest, userId, addressId);
         return new ResponseEntity<>(ResponseUtil.createResponse("Address updated Successfully", addressResponse, HttpStatus.OK), HttpStatus.OK);
     }
 
     @DeleteMapping("/user/{userId}/address/{addressId}")
-    @PreAuthorize("@accessControlService.isAuthenticate(#userId)")
+    @PreAuthorize("@accessControlService.isAuthenticated(#userId)")
     public ResponseEntity deleteAddress(@PathVariable Long userId, @PathVariable Long addressId) {
         addressService.deleteAddress(userId, addressId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

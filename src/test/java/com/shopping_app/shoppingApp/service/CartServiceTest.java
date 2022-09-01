@@ -5,6 +5,7 @@ import com.shopping_app.shoppingApp.Exceptions.NotFoundException;
 import com.shopping_app.shoppingApp.domain.Cart;
 import com.shopping_app.shoppingApp.model.Cart.CartAddRequest;
 import com.shopping_app.shoppingApp.model.Cart.CartItemResponse;
+import com.shopping_app.shoppingApp.model.Cart.CartItemUpdateRequest;
 import com.shopping_app.shoppingApp.model.Cart.CartResponse;
 import com.shopping_app.shoppingApp.payload.MockPayload;
 import org.junit.Before;
@@ -54,16 +55,18 @@ public class CartServiceTest extends AbstractServiceTest {
     }
 
     @Test
-    public void testAddItemToCartFailure_AlreadyExist() {
+    public void testAddItemToCartFailure_StockUnavailable() {
         try {
-            cartService.addItemsToCart(MockPayload.getCartAddRequestPayload(), userId);
+            CartAddRequest cartAddRequestPayload = MockPayload.getCartAddRequestPayload();
+            cartAddRequestPayload.setQuantity(1000);
+            cartService.addItemsToCart(cartAddRequestPayload, userId);
         } catch (BaseException ex) {
             assertEquals(HttpStatus.BAD_REQUEST, ex.getHttpStatus());
         }
     }
 
     @Test
-    public void testAddItemToCartFailure() {
+    public void testAddItemToCartFailure_CartNotFound() {
         try {
             cartService.addItemsToCart(MockPayload.getCartAddRequestPayload(), -1L);
         } catch (NotFoundException ex) {
@@ -74,7 +77,7 @@ public class CartServiceTest extends AbstractServiceTest {
 
     @Test
     public void testGetCartSuccess() {
-        CartResponse cartResponse = cartService.getCart(userId);
+        CartResponse cartResponse = cartService.getUserCart(userId);
         assertNotNull(cartResponse);
         assertTrue(cartResponse.getCartItems().size() > 0);
     }
@@ -82,7 +85,7 @@ public class CartServiceTest extends AbstractServiceTest {
     @Test
     public void testGetCartFailure() {
         try {
-            cartService.getCart(-1L);
+            cartService.getUserCart(-1L);
         } catch (NotFoundException ex) {
             assertEquals("Cart not found!!", ex.getMessage());
             assertEquals(HttpStatus.NOT_FOUND, ex.getHttpStatus());
@@ -104,6 +107,17 @@ public class CartServiceTest extends AbstractServiceTest {
         } catch (NotFoundException ex) {
             assertEquals(HttpStatus.NOT_FOUND, ex.getHttpStatus());
             assertEquals("Cart not found!!", ex.getMessage());
+        }
+    }
+
+    @Test
+    public void testUpdateCartItemFailure_StockUnavailable() {
+        try {
+            CartItemUpdateRequest cartItemUpdateRequestPayload = MockPayload.getCartItemUpdateRequestPayload();
+            cartItemUpdateRequestPayload.setQuantity(1000);
+            cartService.updateCartItem(cartItemUpdateRequestPayload, cartId, cartItemId, userId);
+        } catch (BaseException ex) {
+            assertEquals(HttpStatus.BAD_REQUEST, ex.getHttpStatus());
         }
     }
 

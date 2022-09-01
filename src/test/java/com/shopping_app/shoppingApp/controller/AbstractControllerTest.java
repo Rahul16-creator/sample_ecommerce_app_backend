@@ -22,7 +22,7 @@ public class AbstractControllerTest {
 
     public static final String AUTHORIZATION = "Authorization";
 
-    public static final String AUTH_TOKEN = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QGdtYWlsLmNvbSIsImlhdCI6MTY2MTY3NTY0MywiZXhwIjoxNjYyMDIxMjQzfQ.mjupypZ4Xf3XoRrYBcmxD4-sYlP1wwiCUDDAmtVFXzQ";
+    public static final String AUTH_TOKEN = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QGdtYWlsLmNvbSIsImlhdCI6MTY2MjAyNTAxNCwiZXhwIjoxNjYyMTExNDE0fQ.cjgdrZFL94Y6-XaPa3maVWdEXSiI2J43HM_vs8qnMHw";
 
     @Autowired
     private TestRestTemplate restTemplate;

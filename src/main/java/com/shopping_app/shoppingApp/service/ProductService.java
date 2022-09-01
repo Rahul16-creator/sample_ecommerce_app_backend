@@ -27,11 +27,15 @@ public class ProductService {
     }
 
     public ProductResponse getProductById(Long id) {
-        Optional<Product> product = productRepository.findById(id);
+        Product product = findProductById(id);
+        return ProductResponse.from(product);
+    }
+
+    public Product findProductById(Long productId) {
+        Optional<Product> product = productRepository.findById(productId);
         if (product.isEmpty()) {
             throw new NotFoundException("Product not found", HttpStatus.NOT_FOUND);
         }
-        return ProductResponse.from(product.get());
+        return product.get();
     }
-
 }

@@ -29,28 +29,28 @@ public class CartController {
     private final CartService cartService;
 
     @GetMapping("/user/{userId}/cart")
-    @PreAuthorize("@accessControlService.isAuthenticate(#userId)")
+    @PreAuthorize("@accessControlService.isAuthenticated(#userId)")
     public ResponseEntity<ApiResponse> getUserCart(@PathVariable Long userId) {
-        CartResponse cartResponse = cartService.getCart(userId);
+        CartResponse cartResponse = cartService.getUserCart(userId);
         return new ResponseEntity<>(ResponseUtil.createResponse("Cart fetched Successfully", cartResponse, HttpStatus.OK), HttpStatus.OK);
     }
 
-    @PostMapping("/user/{userId}/cart")
-    @PreAuthorize("@accessControlService.isAuthenticate(#userId)")
+    @PostMapping("/user/{userId}/cart/add")
+    @PreAuthorize("@accessControlService.isAuthenticated(#userId)")
     public ResponseEntity<ApiResponse> addItemToCart(@PathVariable Long userId, @Valid @RequestBody CartAddRequest cartAddRequest) {
         CartResponse cartResponse = cartService.addItemsToCart(cartAddRequest, userId);
         return new ResponseEntity<>(ResponseUtil.createResponse("Item added to your Cart Successfully", cartResponse, HttpStatus.CREATED), HttpStatus.CREATED);
     }
 
     @PutMapping("/user/{userId}/cart/{cartId}/cartItem/{cartItemId}")
-    @PreAuthorize("@accessControlService.isAuthenticate(#userId)")
+    @PreAuthorize("@accessControlService.isAuthenticated(#userId)")
     public ResponseEntity<ApiResponse> updateCartItem(@PathVariable Long userId, @PathVariable Long cartId, @PathVariable Long cartItemId, @Valid @RequestBody CartItemUpdateRequest cartItemUpdateRequest) {
         CartItemResponse response = cartService.updateCartItem(cartItemUpdateRequest, cartId, cartItemId, userId);
         return new ResponseEntity<>(ResponseUtil.createResponse("Cart Item updated Successfully", response, HttpStatus.OK), HttpStatus.OK);
     }
 
     @DeleteMapping("/user/{userId}/cart/{cartId}/cartItem/{cartItemId}")
-    @PreAuthorize("@accessControlService.isAuthenticate(#userId)")
+    @PreAuthorize("@accessControlService.isAuthenticated(#userId)")
     public ResponseEntity<ApiResponse> deleteICartItem(@PathVariable Long userId, @PathVariable Long cartId, @PathVariable Long cartItemId) {
         cartService.deleteCartItem(cartId, cartItemId, userId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
