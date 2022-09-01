@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 public class AccessControlService {
 
     public boolean isAuthenticate(String userId) {
+        System.out.println(userId.getClass().getName());
         UserPrincipal principal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return userId.equals(String.valueOf(principal.getId()));
     }

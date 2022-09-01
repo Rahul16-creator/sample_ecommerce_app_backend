@@ -1,12 +1,19 @@
 package com.shopping_app.shoppingApp.payload;
 
 import com.shopping_app.shoppingApp.domain.Address;
+import com.shopping_app.shoppingApp.domain.Cart;
+import com.shopping_app.shoppingApp.domain.CartItems;
 import com.shopping_app.shoppingApp.domain.User;
 import com.shopping_app.shoppingApp.model.Address.AddressRequest;
+import com.shopping_app.shoppingApp.model.Cart.CartAddRequest;
+import com.shopping_app.shoppingApp.model.Cart.CartItemUpdateRequest;
 import com.shopping_app.shoppingApp.model.Enum.UserRole;
 import com.shopping_app.shoppingApp.model.User.UserLoginRequest;
 import com.shopping_app.shoppingApp.model.User.UserRegisterRequest;
 import com.shopping_app.shoppingApp.model.User.UserUpdateRequest;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class MockPayload {
     public static AddressRequest getAddressRequestPayload() {
@@ -68,5 +75,13 @@ public class MockPayload {
 
     public static UserUpdateRequest getUserUpdateMockRequestPayload() {
         return UserUpdateRequest.builder().name("test").phoneNumber("123456").build();
+    }
+
+    public static CartAddRequest getCartAddRequestPayload() {
+        return CartAddRequest.builder().product_id(1L).quantity(1).build();
+    }
+
+    public static CartItemUpdateRequest getCartItemUpdateRequestPayload() {
+        return CartItemUpdateRequest.builder().quantity(2).build();
     }
 }
