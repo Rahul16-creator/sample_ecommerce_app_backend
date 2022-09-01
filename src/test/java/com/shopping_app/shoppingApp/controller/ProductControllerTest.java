@@ -17,27 +17,37 @@ import static org.junit.Assert.assertEquals;
 public class ProductControllerTest extends AbstractControllerTest {
 
     @Test
-    public void testGetAllProduct() {
+    public void testGetAllProduct_Success() {
         HttpEntity<Object> entity = getEntity(getHeader());
         ResponseEntity<ApiResponse> response1 = httpCall("/products", HttpMethod.GET, entity, ApiResponse.class);
         assertEquals(HttpStatus.OK.value(), response1.getStatusCodeValue());
         assertEquals("All the Products Fetched Successfully", response1.getBody().getMessage());
+    }
 
+    @Test
+    public void testGetAllProduct_Failure_InvalidUser() {
         ResponseEntity<ApiResponse> response2 = httpCall("/products", HttpMethod.GET, null, ApiResponse.class);
         assertEquals(HttpStatus.UNAUTHORIZED.value(), response2.getStatusCodeValue());
     }
 
     @Test
-    public void testGetProductById() {
+    public void testGetProductById_Success() {
         HttpEntity<Object> entity = new HttpEntity<>(getHeader());
         ResponseEntity<ApiResponse> response1 = httpCall("/products/1", HttpMethod.GET, entity, ApiResponse.class);
         assertEquals(HttpStatus.OK.value(), response1.getStatusCodeValue());
         assertEquals("Product Fetched Successfully", response1.getBody().getMessage());
+    }
 
+    @Test
+    public void testGetProductById_Failure_InvalidProductId() {
+        HttpEntity<Object> entity = new HttpEntity<>(getHeader());
         ResponseEntity<ApiResponse> response2 = httpCall("/products/100", HttpMethod.GET, entity, ApiResponse.class);
         assertEquals(HttpStatus.NOT_FOUND.value(), response2.getStatusCodeValue());
         assertEquals("Product not found", response2.getBody().getMessage());
+    }
 
+    @Test
+    public void testGetProductById_Failure_InvalidUser() {
         ResponseEntity<ApiResponse> response3 = httpCall("/products", HttpMethod.GET, null, ApiResponse.class);
         assertEquals(HttpStatus.UNAUTHORIZED.value(), response3.getStatusCodeValue());
     }

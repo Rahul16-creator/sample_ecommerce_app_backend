@@ -2,12 +2,14 @@ package com.shopping_app.shoppingApp.service;
 
 import com.shopping_app.shoppingApp.Exceptions.BaseException;
 import com.shopping_app.shoppingApp.Exceptions.NotFoundException;
+import com.shopping_app.shoppingApp.domain.BaseEntity;
 import com.shopping_app.shoppingApp.domain.Cart;
 import com.shopping_app.shoppingApp.domain.CartItems;
 import com.shopping_app.shoppingApp.domain.Product;
 import com.shopping_app.shoppingApp.model.Cart.CartAddRequest;
-import com.shopping_app.shoppingApp.model.Cart.CartItemUpdateRequest;
+import com.shopping_app.shoppingApp.model.Cart.CartAddResponse;
 import com.shopping_app.shoppingApp.model.Cart.CartItemResponse;
+import com.shopping_app.shoppingApp.model.Cart.CartItemUpdateRequest;
 import com.shopping_app.shoppingApp.model.Cart.CartResponse;
 import com.shopping_app.shoppingApp.repository.CartItemRepository;
 import com.shopping_app.shoppingApp.repository.CartRepository;
@@ -39,26 +41,33 @@ public class CartService {
         return CartResponse.from(userCart, cartItemResponses);
     }
 
-    public CartResponse addItemsToCart(CartAddRequest cartRequest, Long userId) {
+    public CartAddResponse addItemsToCart(CartAddRequest cartRequest, Long userId) {
         Cart userCart = getCartByUserId(userId);
+
         Product product = productService.findProductById(cartRequest.getProduct_id());
+        checkProductAvailability(product, cartRequest.getQuantity());
+
         Optional<CartItems> cartItemProduct = cartItemRepository.findByCartIdAndProductId(userCart.getId(), cartRequest.getProduct_id());
-        checkAvailableQuantityOfProduct(product, cartRequest.getQuantity());
         CartItems cartItem = new CartItems();
         if (cartItemProduct.isEmpty()) {
             cartItem.setProduct(product);
             cartItem.setQuantity(cartRequest.getQuantity());
             cartItem.setCart(userCart);
             userCart.getCartItems().add(cartItem);
+            Cart items = cartRepository.save(userCart);
+
+            Optional<Long> cartItemId = items.getCartItems().stream().filter(e -> e.getProduct().getId() == product.getId()).map(BaseEntity::getId).findFirst();
+            cartItem.setId(cartItemId.get());
         } else {
-            increaseQuantityInExistingItem(userCart, cartRequest.getProduct_id(), cartRequest.getQuantity());
+            int updatedQuantity = cartRequest.getQuantity() + cartItemProduct.get().getQuantity();
+            cartItem = updateCartItemQuantity(cartItemProduct.get(), updatedQuantity);
         }
-        Cart cart = cartRepository.save(userCart);
-        Set<CartItemResponse> cartItemResponses = cart.getCartItems().stream().map(CartItemResponse::from).collect(Collectors.toSet());
-        return CartResponse.from(cart, cartItemResponses);
+
+        // Sending updated Response
+        return CartAddResponse.from(userCart.getId(), cartItem);
     }
 
-    public void checkAvailableQuantityOfProduct(Product product, int quantity) {
+    public void checkProductAvailability(Product product, int quantity) {
         if (product.getAvailableQuantity() < quantity) {
             throw new BaseException("Stock unavailable!!", HttpStatus.BAD_REQUEST);
         }
@@ -79,12 +88,19 @@ public class CartService {
 
     public CartItemResponse updateCartItem(CartItemUpdateRequest cartItemUpdateRequest, Long cartId, Long cartItemId, Long userId) {
         validateCart(userId, cartId);
+
         CartItems cartItem = getCartItemByCartId(cartItemId, cartId);
+
         Product product = productService.findProductById(cartItem.getProduct().getId());
-        checkAvailableQuantityOfProduct(product, cartItemUpdateRequest.getQuantity());
-        cartItem.setQuantity(cartItemUpdateRequest.getQuantity());
-        cartItemRepository.save(cartItem);
-        return CartItemResponse.from(cartItem);
+        checkProductAvailability(product, cartItemUpdateRequest.getQuantity());
+
+        CartItems updatedItem = updateCartItemQuantity(cartItem, cartItemUpdateRequest.getQuantity());
+        return CartItemResponse.from(updatedItem);
+    }
+
+    public CartItems updateCartItemQuantity(CartItems cartItem, int quantity) {
+        cartItem.setQuantity(quantity);
+        return cartItemRepository.save(cartItem);
     }
 
     public Cart getCartByUserId(Long userId) {
@@ -103,13 +119,4 @@ public class CartService {
         }
         return cartItem.get();
     }
-
-    public void increaseQuantityInExistingItem(Cart userCart, Long productId, int quantity) {
-        for (CartItems item : userCart.getCartItems()) {
-            if (item.getProduct().getId() == productId) {
-                item.setQuantity(item.getQuantity() + quantity);
-            }
-        }
-    }
-
 }

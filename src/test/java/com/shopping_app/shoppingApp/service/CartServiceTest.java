@@ -4,6 +4,7 @@ import com.shopping_app.shoppingApp.Exceptions.BaseException;
 import com.shopping_app.shoppingApp.Exceptions.NotFoundException;
 import com.shopping_app.shoppingApp.domain.Cart;
 import com.shopping_app.shoppingApp.model.Cart.CartAddRequest;
+import com.shopping_app.shoppingApp.model.Cart.CartAddResponse;
 import com.shopping_app.shoppingApp.model.Cart.CartItemResponse;
 import com.shopping_app.shoppingApp.model.Cart.CartItemUpdateRequest;
 import com.shopping_app.shoppingApp.model.Cart.CartResponse;
@@ -15,9 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import java.util.Optional;
-import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -38,20 +36,19 @@ public class CartServiceTest extends AbstractServiceTest {
         Cart cart = new Cart();
         cart.setUser(userRepository.findById(userId).get());
         cartRepository.save(cart);
-        CartResponse cartResponse = cartService.addItemsToCart(MockPayload.getCartAddRequestPayload(), userId);
+        CartAddResponse cartResponse = cartService.addItemsToCart(MockPayload.getCartAddRequestPayload(), userId);
         cartId = cartResponse.getId();
-        Set<CartItemResponse> cartItems = cartResponse.getCartItems();
-        Optional<Long> id = cartItems.stream().map(e -> e.getId()).findFirst();
-        cartItemId = id.get();
+        CartItemResponse cartItems = cartResponse.getCartItem();
+        cartItemId = cartItems.getId();
     }
 
     @Test
     public void testAddItemToCartSuccess() {
         CartAddRequest cartAddRequestPayload = MockPayload.getCartAddRequestPayload();
         cartAddRequestPayload.setProduct_id(2L);
-        CartResponse cartResponse = cartService.addItemsToCart(cartAddRequestPayload, userId);
+        CartAddResponse cartResponse = cartService.addItemsToCart(cartAddRequestPayload, userId);
         assertNotNull(cartResponse);
-        assertTrue(cartResponse.getCartItems().size() > 0);
+        assertNotNull(cartResponse.getCartItem().getId());
     }
 
     @Test

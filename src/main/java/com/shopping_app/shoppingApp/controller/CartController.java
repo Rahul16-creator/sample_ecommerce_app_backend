@@ -2,8 +2,9 @@ package com.shopping_app.shoppingApp.controller;
 
 import com.shopping_app.shoppingApp.model.AbstractClass.ApiResponse;
 import com.shopping_app.shoppingApp.model.Cart.CartAddRequest;
-import com.shopping_app.shoppingApp.model.Cart.CartItemUpdateRequest;
+import com.shopping_app.shoppingApp.model.Cart.CartAddResponse;
 import com.shopping_app.shoppingApp.model.Cart.CartItemResponse;
+import com.shopping_app.shoppingApp.model.Cart.CartItemUpdateRequest;
 import com.shopping_app.shoppingApp.model.Cart.CartResponse;
 import com.shopping_app.shoppingApp.service.CartService;
 import com.shopping_app.shoppingApp.utils.ResponseUtil;
@@ -35,10 +36,10 @@ public class CartController {
         return new ResponseEntity<>(ResponseUtil.createResponse("Cart fetched Successfully", cartResponse, HttpStatus.OK), HttpStatus.OK);
     }
 
-    @PostMapping("/user/{userId}/cart/add")
+    @PostMapping("/user/{userId}/cart")
     @PreAuthorize("@accessControlService.isAuthenticated(#userId)")
     public ResponseEntity<ApiResponse> addItemToCart(@PathVariable Long userId, @Valid @RequestBody CartAddRequest cartAddRequest) {
-        CartResponse cartResponse = cartService.addItemsToCart(cartAddRequest, userId);
+        CartAddResponse cartResponse = cartService.addItemsToCart(cartAddRequest, userId);
         return new ResponseEntity<>(ResponseUtil.createResponse("Item added to your Cart Successfully", cartResponse, HttpStatus.CREATED), HttpStatus.CREATED);
     }
 
@@ -51,7 +52,7 @@ public class CartController {
 
     @DeleteMapping("/user/{userId}/cart/{cartId}/cartItem/{cartItemId}")
     @PreAuthorize("@accessControlService.isAuthenticated(#userId)")
-    public ResponseEntity<ApiResponse> deleteICartItem(@PathVariable Long userId, @PathVariable Long cartId, @PathVariable Long cartItemId) {
+    public ResponseEntity<ApiResponse> deleteCartItem(@PathVariable Long userId, @PathVariable Long cartId, @PathVariable Long cartItemId) {
         cartService.deleteCartItem(cartId, cartItemId, userId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
