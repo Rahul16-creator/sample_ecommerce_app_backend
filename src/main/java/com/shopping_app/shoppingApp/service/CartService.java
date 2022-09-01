@@ -43,7 +43,7 @@ public class CartService {
         Cart userCart = getCartByUserId(userId);
         Optional<CartItems> cartItemProduct = cartItemRepository.findByproductId(cartRequest.getProduct_id());
         if (cartItemProduct.isPresent()) {
-            throw new BaseException("Product Already added in cart", HttpStatus.BAD_REQUEST);
+            throw new BaseException("Product already added in cart", HttpStatus.BAD_REQUEST);
         }
         Optional<Product> product = productRepository.findById(cartRequest.getProduct_id());
         CartItems cartItem = new CartItems();
@@ -65,7 +65,7 @@ public class CartService {
     public void validateCart(Long userId, Long cartId) {
         Cart cart = getCartByUserId(userId);
         if (cart.getId() != cartId) {
-            throw new BaseException("Cart with this id not found for this user!!", HttpStatus.FORBIDDEN);
+            throw new BaseException("Cart id not found for this user!!", HttpStatus.FORBIDDEN);
         }
     }
 

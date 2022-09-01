@@ -86,7 +86,7 @@ public class CartControllerTest extends AbstractControllerTest {
 
         ResponseEntity<ApiResponse> response3 = httpCall("/user/" + USER_ID + "/cart/-1/cartItem/" + carItemId, HttpMethod.PUT, entity, ApiResponse.class);
         assertEquals(HttpStatus.FORBIDDEN.value(), response3.getStatusCodeValue());
-        assertEquals("Cart with this id not found for this user!!", response3.getBody().getMessage());
+        assertEquals("Cart id not found for this user!!", response3.getBody().getMessage());
 
         ResponseEntity<ApiResponse> response4 = httpCall("/user/" + USER_ID + "/cart/" + CART_ID + "/cartItem/-1", HttpMethod.PUT, entity, ApiResponse.class);
         assertEquals(HttpStatus.FORBIDDEN.value(), response4.getStatusCodeValue());
@@ -112,7 +112,7 @@ public class CartControllerTest extends AbstractControllerTest {
 
         ResponseEntity<ApiResponse> response3 = httpCall("/user/" + USER_ID + "/cart/-1/cartItem/" + carItemId, HttpMethod.DELETE, entity, ApiResponse.class);
         assertEquals(HttpStatus.FORBIDDEN.value(), response3.getStatusCodeValue());
-        assertEquals("Cart with this id not found for this user!!", response3.getBody().getMessage());
+        assertEquals("Cart id not found for this user!!", response3.getBody().getMessage());
 
         ResponseEntity<ApiResponse> response4 = httpCall("/user/" + USER_ID + "/cart/" + CART_ID + "/cartItem/-1", HttpMethod.DELETE, entity, ApiResponse.class);
         assertEquals(HttpStatus.FORBIDDEN.value(), response4.getStatusCodeValue());
