@@ -33,14 +33,14 @@ public class AddressController {
         return new ResponseEntity<>(ResponseUtil.createResponse("Address added Successfully", addressResponse, HttpStatus.CREATED), HttpStatus.CREATED);
     }
 
-    @PutMapping("/users/{userId}/address/{addressId}")
+    @PutMapping("/users/{userId}/addresses/{addressId}")
     @PreAuthorize("@accessControlService.isAuthenticated(#userId)")
     public ResponseEntity<ApiResponse> updateAddress(@PathVariable Long userId, @Valid @RequestBody AddressRequest addressRequest, @PathVariable Long addressId) {
         AddressResponse addressResponse = addressService.updateAddress(addressRequest, userId, addressId);
         return new ResponseEntity<>(ResponseUtil.createResponse("Address updated Successfully", addressResponse, HttpStatus.OK), HttpStatus.OK);
     }
 
-    @DeleteMapping("/users/{userId}/address/{addressId}")
+    @DeleteMapping("/users/{userId}/addresses/{addressId}")
     @PreAuthorize("@accessControlService.isAuthenticated(#userId)")
     public ResponseEntity deleteAddress(@PathVariable Long userId, @PathVariable Long addressId) {
         addressService.deleteAddress(userId, addressId);

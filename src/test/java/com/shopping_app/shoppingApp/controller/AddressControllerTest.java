@@ -50,7 +50,7 @@ public class AddressControllerTest extends AbstractControllerTest {
         Map<String, Object> addressResponseData = getResponseObjectData(addressResponse);
         HttpEntity<AddressRequest> entity = getEntity(MockPayload.getAddressUpdateRequestPayload(), getHeader());
 
-        ResponseEntity<ApiResponse> response = httpCall("/users/" + user.get("id") + "/address/" + addressResponseData.get("id"), HttpMethod.PUT, entity, ApiResponse.class);
+        ResponseEntity<ApiResponse> response = httpCall("/users/" + user.get("id") + "/addresses/" + addressResponseData.get("id"), HttpMethod.PUT, entity, ApiResponse.class);
 
         assertEquals("Address updated Successfully", response.getBody().getMessage());
         assertEquals(HttpStatus.OK.value(), response.getStatusCodeValue());
@@ -62,7 +62,7 @@ public class AddressControllerTest extends AbstractControllerTest {
         Map<String, Object> addressResponseData = getResponseObjectData(addressResponse);
         HttpEntity<AddressRequest> entity = getEntity(MockPayload.getAddressUpdateRequestPayload(), getHeader());
 
-        ResponseEntity<ApiResponse> response = httpCall("/users/100/address/" + addressResponseData.get("id"), HttpMethod.PUT, entity, ApiResponse.class);
+        ResponseEntity<ApiResponse> response = httpCall("/users/100/addresses/" + addressResponseData.get("id"), HttpMethod.PUT, entity, ApiResponse.class);
 
         assertEquals(HttpStatus.FORBIDDEN.value(), response.getStatusCodeValue());
         assertEquals("Access is denied", response.getBody().getMessage());
@@ -73,7 +73,7 @@ public class AddressControllerTest extends AbstractControllerTest {
         Map<String, Object> user = getResponseObjectData(USER_RESPONSE_ENTITY);
         HttpEntity<AddressRequest> entity = getEntity(MockPayload.getAddressUpdateRequestPayload(), getHeader());
 
-        ResponseEntity<ApiResponse> response = httpCall("/users/" + user.get("id") + "/address/100", HttpMethod.PUT, entity, ApiResponse.class);
+        ResponseEntity<ApiResponse> response = httpCall("/users/" + user.get("id") + "/addresses/100", HttpMethod.PUT, entity, ApiResponse.class);
 
         assertEquals(HttpStatus.FORBIDDEN.value(), response.getStatusCodeValue());
         assertEquals("Address with this Id Not Found for this user!!", response.getBody().getMessage());
@@ -86,7 +86,7 @@ public class AddressControllerTest extends AbstractControllerTest {
         Map<String, Object> addressResponseData = getResponseObjectData(addressResponse);
         HttpEntity<Object> entity = getEntity(getHeader());
 
-        ResponseEntity<ApiResponse> response = httpCall("/users/" + user.get("id") + "/address/" + addressResponseData.get("id"), HttpMethod.DELETE, entity, ApiResponse.class);
+        ResponseEntity<ApiResponse> response = httpCall("/users/" + user.get("id") + "/addresses/" + addressResponseData.get("id"), HttpMethod.DELETE, entity, ApiResponse.class);
 
         assertEquals(HttpStatus.NO_CONTENT.value(), response.getStatusCodeValue());
     }
@@ -97,7 +97,7 @@ public class AddressControllerTest extends AbstractControllerTest {
         Map<String, Object> addressResponseData = getResponseObjectData(addressResponse);
         HttpEntity<Object> entity = getEntity(getHeader());
 
-        ResponseEntity<ApiResponse> response = httpCall("/users/100/address/" + addressResponseData.get("id"), HttpMethod.DELETE, entity, ApiResponse.class);
+        ResponseEntity<ApiResponse> response = httpCall("/users/100/addresses/" + addressResponseData.get("id"), HttpMethod.DELETE, entity, ApiResponse.class);
 
         assertEquals(HttpStatus.FORBIDDEN.value(), response.getStatusCodeValue());
         assertEquals("Access is denied", response.getBody().getMessage());
@@ -108,7 +108,7 @@ public class AddressControllerTest extends AbstractControllerTest {
         Map<String, Object> user = getResponseObjectData(USER_RESPONSE_ENTITY);
         HttpEntity<Object> entity = getEntity(getHeader());
 
-        ResponseEntity<ApiResponse> response = httpCall("/users/" + user.get("id") + "/address/100", HttpMethod.DELETE, entity, ApiResponse.class);
+        ResponseEntity<ApiResponse> response = httpCall("/users/" + user.get("id") + "/addresses/100", HttpMethod.DELETE, entity, ApiResponse.class);
 
         assertEquals(HttpStatus.FORBIDDEN.value(), response.getStatusCodeValue());
         assertEquals("Address with this Id Not Found for this user!!", response.getBody().getMessage());
