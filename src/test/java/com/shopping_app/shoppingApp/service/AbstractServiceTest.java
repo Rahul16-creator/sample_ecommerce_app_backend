@@ -22,7 +22,7 @@ public class AbstractServiceTest {
     public PasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
-    private CartRepository cartRepository;
+    public CartRepository cartRepository;
 
     public Long userId;
 
