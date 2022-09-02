@@ -17,6 +17,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.Optional;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -36,7 +38,8 @@ public class CartServiceTest extends AbstractServiceTest {
         Cart cart = new Cart();
         cart.setUser(userRepository.findById(userId).get());
         cartRepository.save(cart);
-        CartAddResponse cartResponse = cartService.addItemsToCart(MockPayload.getCartAddRequestPayload(), userId);
+        Optional<Cart> userCart = cartRepository.findByUserId(userId);
+        CartAddResponse cartResponse = cartService.addItemsToCart(MockPayload.getCartAddRequestPayload(), userId, userCart.get().getId());
         cartId = cartResponse.getId();
         CartItemResponse cartItems = cartResponse.getCartItem();
         cartItemId = cartItems.getId();
@@ -46,7 +49,7 @@ public class CartServiceTest extends AbstractServiceTest {
     public void testAddItemToCartSuccess() {
         CartAddRequest cartAddRequestPayload = MockPayload.getCartAddRequestPayload();
         cartAddRequestPayload.setProduct_id(2L);
-        CartAddResponse cartResponse = cartService.addItemsToCart(cartAddRequestPayload, userId);
+        CartAddResponse cartResponse = cartService.addItemsToCart(cartAddRequestPayload, userId, cartId);
         assertNotNull(cartResponse);
         assertNotNull(cartResponse.getCartItem().getId());
     }
@@ -56,7 +59,7 @@ public class CartServiceTest extends AbstractServiceTest {
         try {
             CartAddRequest cartAddRequestPayload = MockPayload.getCartAddRequestPayload();
             cartAddRequestPayload.setQuantity(1000);
-            cartService.addItemsToCart(cartAddRequestPayload, userId);
+            cartService.addItemsToCart(cartAddRequestPayload, userId, cartId);
         } catch (BaseException ex) {
             assertEquals(HttpStatus.BAD_REQUEST, ex.getHttpStatus());
         }
@@ -65,7 +68,7 @@ public class CartServiceTest extends AbstractServiceTest {
     @Test
     public void testAddItemToCartFailure_CartNotFound() {
         try {
-            cartService.addItemsToCart(MockPayload.getCartAddRequestPayload(), -1L);
+            cartService.addItemsToCart(MockPayload.getCartAddRequestPayload(), -1L, cartId);
         } catch (NotFoundException ex) {
             assertEquals(HttpStatus.NOT_FOUND, ex.getHttpStatus());
             assertEquals("Cart not found!!", ex.getMessage());

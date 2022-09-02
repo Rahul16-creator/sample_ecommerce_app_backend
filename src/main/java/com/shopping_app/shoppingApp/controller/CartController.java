@@ -29,28 +29,28 @@ public class CartController {
 
     private final CartService cartService;
 
-    @GetMapping("/user/{userId}/cart")
+    @GetMapping("/users/{userId}/cart")
     @PreAuthorize("@accessControlService.isAuthenticated(#userId)")
     public ResponseEntity<ApiResponse> getUserCart(@PathVariable Long userId) {
         CartResponse cartResponse = cartService.getUserCart(userId);
         return new ResponseEntity<>(ResponseUtil.createResponse("Cart fetched Successfully", cartResponse, HttpStatus.OK), HttpStatus.OK);
     }
 
-    @PostMapping("/user/{userId}/cart")
+    @PostMapping("/users/{userId}/cart/{cartId}/cartItems")
     @PreAuthorize("@accessControlService.isAuthenticated(#userId)")
-    public ResponseEntity<ApiResponse> addItemToCart(@PathVariable Long userId, @Valid @RequestBody CartAddRequest cartAddRequest) {
-        CartAddResponse cartResponse = cartService.addItemsToCart(cartAddRequest, userId);
+    public ResponseEntity<ApiResponse> addItemToCart(@PathVariable Long cartId, @PathVariable Long userId, @Valid @RequestBody CartAddRequest cartAddRequest) {
+        CartAddResponse cartResponse = cartService.addItemsToCart(cartAddRequest, userId,cartId);
         return new ResponseEntity<>(ResponseUtil.createResponse("Item added to your Cart Successfully", cartResponse, HttpStatus.CREATED), HttpStatus.CREATED);
     }
 
-    @PutMapping("/user/{userId}/cart/{cartId}/cartItem/{cartItemId}")
+    @PutMapping("/users/{userId}/cart/{cartId}/cartItem/{cartItemId}")
     @PreAuthorize("@accessControlService.isAuthenticated(#userId)")
     public ResponseEntity<ApiResponse> updateCartItem(@PathVariable Long userId, @PathVariable Long cartId, @PathVariable Long cartItemId, @Valid @RequestBody CartItemUpdateRequest cartItemUpdateRequest) {
         CartItemResponse response = cartService.updateCartItem(cartItemUpdateRequest, cartId, cartItemId, userId);
         return new ResponseEntity<>(ResponseUtil.createResponse("Cart Item updated Successfully", response, HttpStatus.OK), HttpStatus.OK);
     }
 
-    @DeleteMapping("/user/{userId}/cart/{cartId}/cartItem/{cartItemId}")
+    @DeleteMapping("/users/{userId}/cart/{cartId}/cartItem/{cartItemId}")
     @PreAuthorize("@accessControlService.isAuthenticated(#userId)")
     public ResponseEntity<ApiResponse> deleteCartItem(@PathVariable Long userId, @PathVariable Long cartId, @PathVariable Long cartItemId) {
         cartService.deleteCartItem(cartId, cartItemId, userId);

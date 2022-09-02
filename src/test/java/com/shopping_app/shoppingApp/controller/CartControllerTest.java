@@ -1,5 +1,6 @@
 package com.shopping_app.shoppingApp.controller;
 
+import com.shopping_app.shoppingApp.domain.Cart;
 import com.shopping_app.shoppingApp.model.AbstractClass.ApiResponse;
 import com.shopping_app.shoppingApp.model.Cart.CartAddRequest;
 import com.shopping_app.shoppingApp.model.Cart.CartAddResponse;
@@ -17,6 +18,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 
@@ -32,6 +34,8 @@ public class CartControllerTest extends AbstractControllerTest {
     public void setUp() {
         Map<String, Object> user = getResponseObjectData(USER_RESPONSE_ENTITY);
         USER_ID = String.valueOf(user.get("id"));
+        Optional<Cart> userCart = cartRepository.findByUserId(Long.valueOf(USER_ID));
+        CART_ID = String.valueOf(userCart.get().getId());
         CART_RESPONSE_ENTITY = addItemInCart(USER_ID);
         Map<String, Object> cart = getResponseObjectData(CART_RESPONSE_ENTITY);
         CART_ID = String.valueOf(cart.get("id"));
@@ -56,7 +60,7 @@ public class CartControllerTest extends AbstractControllerTest {
         request.setQuantity(1000);
         HttpEntity<CartAddRequest> entity = getEntity(request, getHeader());
 
-        ResponseEntity<ApiResponse> response = httpCall("/user/" + USER_ID + "/cart", HttpMethod.POST, entity, ApiResponse.class);
+        ResponseEntity<ApiResponse> response = httpCall("/users/" + USER_ID + "/cart/" + CART_ID + "/cartItems", HttpMethod.POST, entity, ApiResponse.class);
         assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatusCodeValue());
     }
 
@@ -64,17 +68,17 @@ public class CartControllerTest extends AbstractControllerTest {
     public void testGetCart_Success() {
         HttpEntity<Object> entity = new HttpEntity<>(getHeader());
 
-        ResponseEntity<ApiResponse> response1 = httpCall("/user/" + USER_ID + "/cart", HttpMethod.GET, entity, ApiResponse.class);
+        ResponseEntity<ApiResponse> response = httpCall("/users/" + USER_ID + "/cart", HttpMethod.GET, entity, ApiResponse.class);
 
-        assertEquals(HttpStatus.OK.value(), response1.getStatusCodeValue());
-        assertEquals("Cart fetched Successfully", response1.getBody().getMessage());
+        assertEquals(HttpStatus.OK.value(), response.getStatusCodeValue());
+        assertEquals("Cart fetched Successfully", response.getBody().getMessage());
     }
 
     @Test
     public void testGetCart_Failure_InvalidUser() {
         HttpEntity<Object> entity = new HttpEntity<>(getHeader());
 
-        ResponseEntity<ApiResponse> response = httpCall("/user/-100/cart", HttpMethod.GET, entity, ApiResponse.class);
+        ResponseEntity<ApiResponse> response = httpCall("/users/-100/cart", HttpMethod.GET, entity, ApiResponse.class);
 
         assertEquals(HttpStatus.FORBIDDEN.value(), response.getStatusCodeValue());
         assertEquals("Access is denied", response.getBody().getMessage());
@@ -82,7 +86,7 @@ public class CartControllerTest extends AbstractControllerTest {
 
     @Test
     public void testGetCart_Failure_TokenMissing() {
-        ResponseEntity<ApiResponse> response = httpCall("/user/" + USER_ID + "/cart", HttpMethod.GET, null, ApiResponse.class);
+        ResponseEntity<ApiResponse> response = httpCall("/users/" + USER_ID + "/cart", HttpMethod.GET, null, ApiResponse.class);
         assertEquals(HttpStatus.UNAUTHORIZED.value(), response.getStatusCodeValue());
     }
 
@@ -95,7 +99,7 @@ public class CartControllerTest extends AbstractControllerTest {
         CartItemUpdateRequest cartItemUpdateRequestPayload = MockPayload.getCartItemUpdateRequestPayload();
         HttpEntity<Object> entity = getEntity(cartItemUpdateRequestPayload, getHeader());
 
-        ResponseEntity<ApiResponse> response1 = httpCall("/user/" + USER_ID + "/cart/" + CART_ID + "/cartItem/" + carItemId, HttpMethod.PUT, entity, ApiResponse.class);
+        ResponseEntity<ApiResponse> response1 = httpCall("/users/" + USER_ID + "/cart/" + CART_ID + "/cartItem/" + carItemId, HttpMethod.PUT, entity, ApiResponse.class);
 
         assertEquals(HttpStatus.OK.value(), response1.getStatusCodeValue());
         assertEquals("Cart Item updated Successfully", response1.getBody().getMessage());
@@ -111,7 +115,7 @@ public class CartControllerTest extends AbstractControllerTest {
         HttpEntity<Object> entity = getEntity(cartItemUpdateRequestPayload, getHeader());
 
 
-        ResponseEntity<ApiResponse> response = httpCall("/user/-100/cart/" + CART_ID + "/cartItem/" + carItemId, HttpMethod.PUT, entity, ApiResponse.class);
+        ResponseEntity<ApiResponse> response = httpCall("/users/-100/cart/" + CART_ID + "/cartItem/" + carItemId, HttpMethod.PUT, entity, ApiResponse.class);
 
         assertEquals(HttpStatus.FORBIDDEN.value(), response.getStatusCodeValue());
         assertEquals("Access is denied", response.getBody().getMessage());
@@ -126,7 +130,7 @@ public class CartControllerTest extends AbstractControllerTest {
         CartItemUpdateRequest cartItemUpdateRequestPayload = MockPayload.getCartItemUpdateRequestPayload();
         HttpEntity<Object> entity = getEntity(cartItemUpdateRequestPayload, getHeader());
 
-        ResponseEntity<ApiResponse> response = httpCall("/user/" + USER_ID + "/cart/-1/cartItem/" + carItemId, HttpMethod.PUT, entity, ApiResponse.class);
+        ResponseEntity<ApiResponse> response = httpCall("/users/" + USER_ID + "/cart/-1/cartItem/" + carItemId, HttpMethod.PUT, entity, ApiResponse.class);
 
         assertEquals(HttpStatus.FORBIDDEN.value(), response.getStatusCodeValue());
         assertEquals("Invalid cart id!!", response.getBody().getMessage());
@@ -142,7 +146,7 @@ public class CartControllerTest extends AbstractControllerTest {
         HttpEntity<Object> entity = getEntity(cartItemUpdateRequestPayload, getHeader());
 
 
-        ResponseEntity<ApiResponse> response = httpCall("/user/" + USER_ID + "/cart/" + CART_ID + "/cartItem/-1", HttpMethod.PUT, entity, ApiResponse.class);
+        ResponseEntity<ApiResponse> response = httpCall("/users/" + USER_ID + "/cart/" + CART_ID + "/cartItem/-1", HttpMethod.PUT, entity, ApiResponse.class);
 
         assertEquals(HttpStatus.FORBIDDEN.value(), response.getStatusCodeValue());
         assertEquals("CartItem not found", response.getBody().getMessage());
@@ -158,7 +162,7 @@ public class CartControllerTest extends AbstractControllerTest {
         cartItemUpdateRequestPayload.setQuantity(1000);
         HttpEntity<CartItemUpdateRequest> entity = getEntity(cartItemUpdateRequestPayload, getHeader());
 
-        ResponseEntity<ApiResponse> response = httpCall("/user/" + USER_ID + "/cart/" + CART_ID + "/cartItem/" + carItemId, HttpMethod.PUT, entity, ApiResponse.class);
+        ResponseEntity<ApiResponse> response = httpCall("/users/" + USER_ID + "/cart/" + CART_ID + "/cartItem/" + carItemId, HttpMethod.PUT, entity, ApiResponse.class);
         assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatusCodeValue());
     }
 
@@ -170,7 +174,7 @@ public class CartControllerTest extends AbstractControllerTest {
 
         HttpEntity<Object> entity = new HttpEntity<>(getHeader());
 
-        ResponseEntity<ApiResponse> response = httpCall("/user/" + USER_ID + "/cart/" + CART_ID + "/cartItem/" + carItemId, HttpMethod.DELETE, entity, ApiResponse.class);
+        ResponseEntity<ApiResponse> response = httpCall("/users/" + USER_ID + "/cart/" + CART_ID + "/cartItem/" + carItemId, HttpMethod.DELETE, entity, ApiResponse.class);
         assertEquals(HttpStatus.NO_CONTENT.value(), response.getStatusCodeValue());
     }
 
@@ -182,7 +186,7 @@ public class CartControllerTest extends AbstractControllerTest {
 
         HttpEntity<Object> entity = new HttpEntity<>(getHeader());
 
-        ResponseEntity<ApiResponse> response = httpCall("/user/-100/cart/" + CART_ID + "/cartItem/" + carItemId, HttpMethod.DELETE, entity, ApiResponse.class);
+        ResponseEntity<ApiResponse> response = httpCall("/users/-100/cart/" + CART_ID + "/cartItem/" + carItemId, HttpMethod.DELETE, entity, ApiResponse.class);
 
         assertEquals(HttpStatus.FORBIDDEN.value(), response.getStatusCodeValue());
         assertEquals("Access is denied", response.getBody().getMessage());
@@ -196,7 +200,7 @@ public class CartControllerTest extends AbstractControllerTest {
 
         HttpEntity<Object> entity = new HttpEntity<>(getHeader());
 
-        ResponseEntity<ApiResponse> response = httpCall("/user/" + USER_ID + "/cart/-1/cartItem/" + carItemId, HttpMethod.DELETE, entity, ApiResponse.class);
+        ResponseEntity<ApiResponse> response = httpCall("/users/" + USER_ID + "/cart/-1/cartItem/" + carItemId, HttpMethod.DELETE, entity, ApiResponse.class);
 
         assertEquals(HttpStatus.FORBIDDEN.value(), response.getStatusCodeValue());
         assertEquals("Invalid cart id!!", response.getBody().getMessage());
@@ -206,7 +210,7 @@ public class CartControllerTest extends AbstractControllerTest {
     public void testDeleteCartItem_Failure_InvalidCartItem() {
         HttpEntity<Object> entity = new HttpEntity<>(getHeader());
 
-        ResponseEntity<ApiResponse> response = httpCall("/user/" + USER_ID + "/cart/" + CART_ID + "/cartItem/-1", HttpMethod.DELETE, entity, ApiResponse.class);
+        ResponseEntity<ApiResponse> response = httpCall("/users/" + USER_ID + "/cart/" + CART_ID + "/cartItem/-1", HttpMethod.DELETE, entity, ApiResponse.class);
 
         assertEquals(HttpStatus.FORBIDDEN.value(), response.getStatusCodeValue());
         assertEquals("CartItem not found", response.getBody().getMessage());
@@ -215,7 +219,7 @@ public class CartControllerTest extends AbstractControllerTest {
     public ResponseEntity<ApiResponse> addItemInCart(String userId) {
         CartAddRequest request = MockPayload.getCartAddRequestPayload();
         HttpEntity<CartAddRequest> entity = getEntity(request, getHeader());
-        return httpCall("/user/" + userId + "/cart", HttpMethod.POST, entity, ApiResponse.class);
+        return httpCall("/users/" + userId + "/cart/" + CART_ID + "/cartItems", HttpMethod.POST, entity, ApiResponse.class);
     }
 
 }

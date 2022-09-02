@@ -41,7 +41,8 @@ public class CartService {
         return CartResponse.from(userCart, cartItemResponses);
     }
 
-    public CartAddResponse addItemsToCart(CartAddRequest cartRequest, Long userId) {
+    public CartAddResponse addItemsToCart(CartAddRequest cartRequest, Long userId,Long cartId) {
+        validateCart(userId, cartId);
         Cart userCart = getCartByUserId(userId);
 
         Product product = productService.findProductById(cartRequest.getProduct_id());

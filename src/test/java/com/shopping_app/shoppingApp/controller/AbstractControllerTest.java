@@ -34,7 +34,7 @@ public class AbstractControllerTest {
     private AddressRepository addressRepository;
 
     @Autowired
-    private CartRepository cartRepository;
+    public CartRepository cartRepository;
 
     public ResponseEntity<ApiResponse> USER_RESPONSE_ENTITY;
 
