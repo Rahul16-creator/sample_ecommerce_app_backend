@@ -26,7 +26,7 @@ public class AddressController {
 
     private final AddressService addressService;
 
-    @PostMapping("/users/{userId}/address")
+    @PostMapping("/users/{userId}/addresses")
     @PreAuthorize("@accessControlService.isAuthenticated(#userId)")
     public ResponseEntity<ApiResponse> addAddress(@PathVariable Long userId, @Valid @RequestBody AddressRequest addressRequest) {
         AddressResponse addressResponse = addressService.addAddress(addressRequest, userId);

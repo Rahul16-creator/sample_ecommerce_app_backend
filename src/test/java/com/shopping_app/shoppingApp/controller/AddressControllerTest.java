@@ -23,7 +23,7 @@ public class AddressControllerTest extends AbstractControllerTest {
     public ResponseEntity<ApiResponse> addAddress() {
         Map<String, Object> user = getResponseObjectData(USER_RESPONSE_ENTITY);
         HttpEntity<AddressRequest> entity = getEntity(MockPayload.getAddressRequestPayload(), getHeader());
-        return httpCall("/users/" + user.get("id") + "/address", HttpMethod.POST, entity, ApiResponse.class);
+        return httpCall("/users/" + user.get("id") + "/addresses", HttpMethod.POST, entity, ApiResponse.class);
     }
 
     @Test
@@ -37,7 +37,7 @@ public class AddressControllerTest extends AbstractControllerTest {
     public void testAddAddress_Failure_InvalidUser() {
         HttpEntity<AddressRequest> entity = getEntity(MockPayload.getAddressRequestPayload(), getHeader());
 
-        ResponseEntity<ApiResponse> response = httpCall("/users/100/address", HttpMethod.POST, entity, ApiResponse.class);
+        ResponseEntity<ApiResponse> response = httpCall("/users/100/addresses", HttpMethod.POST, entity, ApiResponse.class);
 
         assertEquals(HttpStatus.FORBIDDEN.value(), response.getStatusCodeValue());
         assertEquals("Access is denied", response.getBody().getMessage());
