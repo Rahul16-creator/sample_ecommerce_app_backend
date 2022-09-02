@@ -4,7 +4,7 @@ import com.shopping_app.shoppingApp.Exceptions.BaseException;
 import com.shopping_app.shoppingApp.Exceptions.NotFoundException;
 import com.shopping_app.shoppingApp.domain.BaseEntity;
 import com.shopping_app.shoppingApp.domain.Cart;
-import com.shopping_app.shoppingApp.domain.CartItems;
+import com.shopping_app.shoppingApp.domain.CartItem;
 import com.shopping_app.shoppingApp.domain.Product;
 import com.shopping_app.shoppingApp.model.Cart.CartAddRequest;
 import com.shopping_app.shoppingApp.model.Cart.CartAddResponse;
@@ -47,8 +47,8 @@ public class CartService {
         Product product = productService.findProductById(cartRequest.getProduct_id());
         checkProductAvailability(product, cartRequest.getQuantity());
 
-        Optional<CartItems> cartItemProduct = cartItemRepository.findByCartIdAndProductId(userCart.getId(), cartRequest.getProduct_id());
-        CartItems cartItem = new CartItems();
+        Optional<CartItem> cartItemProduct = cartItemRepository.findByCartIdAndProductId(userCart.getId(), cartRequest.getProduct_id());
+        CartItem cartItem = new CartItem();
         if (cartItemProduct.isEmpty()) {
             cartItem.setProduct(product);
             cartItem.setQuantity(cartRequest.getQuantity());
@@ -89,16 +89,16 @@ public class CartService {
     public CartItemResponse updateCartItem(CartItemUpdateRequest cartItemUpdateRequest, Long cartId, Long cartItemId, Long userId) {
         validateCart(userId, cartId);
 
-        CartItems cartItem = getCartItemByCartId(cartItemId, cartId);
+        CartItem cartItem = getCartItemByCartId(cartItemId, cartId);
 
         Product product = productService.findProductById(cartItem.getProduct().getId());
         checkProductAvailability(product, cartItemUpdateRequest.getQuantity());
 
-        CartItems updatedItem = updateCartItemQuantity(cartItem, cartItemUpdateRequest.getQuantity());
+        CartItem updatedItem = updateCartItemQuantity(cartItem, cartItemUpdateRequest.getQuantity());
         return CartItemResponse.from(updatedItem);
     }
 
-    public CartItems updateCartItemQuantity(CartItems cartItem, int quantity) {
+    public CartItem updateCartItemQuantity(CartItem cartItem, int quantity) {
         cartItem.setQuantity(quantity);
         return cartItemRepository.save(cartItem);
     }
@@ -112,8 +112,8 @@ public class CartService {
         return cart.get();
     }
 
-    public CartItems getCartItemByCartId(Long cartItemId, Long cartId) {
-        Optional<CartItems> cartItem = cartItemRepository.findByIdAndCartId(cartItemId, cartId);
+    public CartItem getCartItemByCartId(Long cartItemId, Long cartId) {
+        Optional<CartItem> cartItem = cartItemRepository.findByIdAndCartId(cartItemId, cartId);
         if (cartItem.isEmpty()) {
             throw new BaseException("CartItem not found", HttpStatus.FORBIDDEN);
         }

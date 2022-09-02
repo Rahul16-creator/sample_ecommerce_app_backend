@@ -1,15 +1,15 @@
 package com.shopping_app.shoppingApp.repository;
 
-import com.shopping_app.shoppingApp.domain.CartItems;
+import com.shopping_app.shoppingApp.domain.CartItem;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
-public interface CartItemRepository extends JpaRepository<CartItems, Long> {
+public interface CartItemRepository extends JpaRepository<CartItem, Long> {
 
-    Optional<CartItems> findByIdAndCartId(Long cartItemId, Long cartId);
+    Optional<CartItem> findByIdAndCartId(Long cartItemId, Long cartId);
 
-    Optional<CartItems> findByCartIdAndProductId(Long cartId, Long productId);
+    Optional<CartItem> findByCartIdAndProductId(Long cartId, Long productId);
 }

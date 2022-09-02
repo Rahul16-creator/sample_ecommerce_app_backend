@@ -1,6 +1,6 @@
 package com.shopping_app.shoppingApp.model.Cart;
 
-import com.shopping_app.shoppingApp.domain.CartItems;
+import com.shopping_app.shoppingApp.domain.CartItem;
 import com.shopping_app.shoppingApp.model.Product.ProductResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,7 +19,7 @@ public class CartItemResponse {
     private ProductResponse productResponse;
     private int quantity;
 
-    public static CartItemResponse from(CartItems cartItems) {
+    public static CartItemResponse from(CartItem cartItems) {
         CartItemResponse cartItemResponse = new CartItemResponse();
         cartItemResponse.setProductResponse(ProductResponse.from(cartItems.getProduct()));
         cartItemResponse.setId(cartItems.getId());
