@@ -1,7 +1,7 @@
 package com.shopping_app.shoppingApp.controller;
 
 import com.shopping_app.shoppingApp.model.AbstractClass.ApiResponse;
-import com.shopping_app.shoppingApp.model.Order.OrderAddRequest;
+import com.shopping_app.shoppingApp.model.Order.CreateOrderRequest;
 import com.shopping_app.shoppingApp.model.Order.OrderResponse;
 import com.shopping_app.shoppingApp.model.Order.OrderUpdateRequest;
 import com.shopping_app.shoppingApp.service.OrderService;
@@ -43,8 +43,8 @@ public class OrderController {
 
     @PostMapping("/users/{userId}/orders")
     @PreAuthorize("@accessControlService.isAuthenticated(#userId)")
-    public ResponseEntity<ApiResponse> addUserOrders(@PathVariable Long userId, @Valid @RequestBody OrderAddRequest orderAddRequest) {
-        OrderResponse orderResponse = orderService.addOrders(userId, orderAddRequest);
+    public ResponseEntity<ApiResponse> createUserOrder(@PathVariable Long userId, @Valid @RequestBody CreateOrderRequest orderAddRequest) {
+        OrderResponse orderResponse = orderService.createOrder(userId, orderAddRequest);
         return new ResponseEntity<>(ResponseUtil.createResponse("Order placed Successfully", orderResponse, HttpStatus.CREATED), HttpStatus.CREATED);
     }
 

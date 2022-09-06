@@ -4,7 +4,7 @@ import com.shopping_app.shoppingApp.Exceptions.BaseException;
 import com.shopping_app.shoppingApp.domain.Address;
 import com.shopping_app.shoppingApp.domain.Cart;
 import com.shopping_app.shoppingApp.model.Cart.CartAddResponse;
-import com.shopping_app.shoppingApp.model.Order.OrderAddRequest;
+import com.shopping_app.shoppingApp.model.Order.CreateOrderRequest;
 import com.shopping_app.shoppingApp.model.Order.OrderResponse;
 import com.shopping_app.shoppingApp.payload.MockPayload;
 import org.junit.Before;
@@ -48,29 +48,29 @@ public class OrderServiceTest extends AbstractServiceTest {
         CartAddResponse cartResponse = cartService.addItemsToCart(MockPayload.getCartAddRequestPayload(), userId, userCart.get().getId());
         cartId = cartResponse.getId();
 
-        OrderAddRequest orderAddMockerRequest = MockPayload.getOrderAddMockerRequest();
+        CreateOrderRequest orderAddMockerRequest = MockPayload.getOrderAddMockerRequest();
         orderAddMockerRequest.setCartId(cartId);
         orderAddMockerRequest.setShippingAddressId(addressId);
-        OrderResponse orderResponse = orderService.addOrders(userId, orderAddMockerRequest);
+        OrderResponse orderResponse = orderService.createOrder(userId, orderAddMockerRequest);
         orderId = orderResponse.getId();
     }
 
     @Test
     public void testAddOrderSuccess() {
-        OrderAddRequest orderAddMockerRequest = MockPayload.getOrderAddMockerRequest();
+        CreateOrderRequest orderAddMockerRequest = MockPayload.getOrderAddMockerRequest();
         orderAddMockerRequest.setCartId(cartId);
         orderAddMockerRequest.setShippingAddressId(addressId);
-        OrderResponse orderResponse = orderService.addOrders(userId, orderAddMockerRequest);
+        OrderResponse orderResponse = orderService.createOrder(userId, orderAddMockerRequest);
         assertNotNull(orderResponse);
     }
 
     @Test
     public void testAddOrderFailure_AddressNotFound() {
         try {
-            OrderAddRequest orderAddRequest = MockPayload.getOrderAddMockerRequest();
+            CreateOrderRequest orderAddRequest = MockPayload.getOrderAddMockerRequest();
             orderAddRequest.setCartId(cartId);
             orderAddRequest.setShippingAddressId(-1L);
-            orderService.addOrders(userId, orderAddRequest);
+            orderService.createOrder(userId, orderAddRequest);
         } catch (BaseException ex) {
             assertEquals("Address with this Id Not Found for this user!!", ex.getMessage());
         }

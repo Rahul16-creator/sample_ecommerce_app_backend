@@ -9,7 +9,7 @@ import com.shopping_app.shoppingApp.domain.OrderItems;
 import com.shopping_app.shoppingApp.domain.Product;
 import com.shopping_app.shoppingApp.domain.User;
 import com.shopping_app.shoppingApp.model.Enum.OrderStatus;
-import com.shopping_app.shoppingApp.model.Order.OrderAddRequest;
+import com.shopping_app.shoppingApp.model.Order.CreateOrderRequest;
 import com.shopping_app.shoppingApp.model.Order.OrderResponse;
 import com.shopping_app.shoppingApp.model.Order.OrderUpdateRequest;
 import com.shopping_app.shoppingApp.repository.CartItemRepository;
@@ -44,16 +44,15 @@ public class OrderService {
     private final ProductRepository productRepository;
 
     public List<OrderResponse> getUserOrders(Long userId) {
-        Optional<List<Order>> orders = orderRepository.findAllByUserId(userId);
-        return orders.get().stream().map(OrderResponse::from).collect(Collectors.toList());
+        List<Order> orders = orderRepository.findAllByUserId(userId);
+        return orders.stream().map(OrderResponse::from).collect(Collectors.toList());
     }
 
     public OrderResponse getUserOrderById(Long userId, Long orderId) {
         return OrderResponse.from(getOrderById(userId, orderId));
     }
 
-    public OrderResponse addOrders(Long userId, OrderAddRequest orderAddRequest) {
-
+    public OrderResponse createOrder(Long userId, CreateOrderRequest orderAddRequest) {
         Cart cart = cartService.getCartByUserId(userId);
         cartService.validateCart(userId, orderAddRequest.getCartId());
 
@@ -106,11 +105,12 @@ public class OrderService {
 
     public OrderResponse updateUserOrderStatus(Long userId, Long orderId, OrderUpdateRequest orderUpdateRequest) {
         Order order = getOrderById(userId, orderId);
-        checkOrderValidity(order);
+        checkOrderValidity(order, orderUpdateRequest);
 
         order.setStatus(orderUpdateRequest.getOrderStatus());
         Order updatedOrder = orderRepository.save(order);
 
+        // when order is cancelled , update the product availability count
         addProductAvailability(updatedOrder);
         return OrderResponse.from(updatedOrder);
     }
@@ -123,7 +123,16 @@ public class OrderService {
         }
     }
 
-    public void checkOrderValidity(Order order) {
+    public void checkOrderValidity(Order order, OrderUpdateRequest orderUpdateRequest) {
+        /**
+         *  Order status from api should be `CANCELLED` , other than this will be throw exception here
+         */
+        if (!orderUpdateRequest.getOrderStatus().equals(OrderStatus.CANCELLED)) {
+            throw new BaseException("Invalid order status", HttpStatus.BAD_REQUEST);
+        }
+        /**
+         *  if the order is already cancelled , then exception will be throw here
+         */
         if (order.getStatus().equals(OrderStatus.CANCELLED)) {
             throw new BaseException("This order is already cancelled", HttpStatus.BAD_REQUEST);
         }

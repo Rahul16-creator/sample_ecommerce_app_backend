@@ -4,7 +4,7 @@ import com.shopping_app.shoppingApp.domain.Cart;
 import com.shopping_app.shoppingApp.model.AbstractClass.ApiResponse;
 import com.shopping_app.shoppingApp.model.Address.AddressRequest;
 import com.shopping_app.shoppingApp.model.Cart.CartAddRequest;
-import com.shopping_app.shoppingApp.model.Order.OrderAddRequest;
+import com.shopping_app.shoppingApp.model.Order.CreateOrderRequest;
 import com.shopping_app.shoppingApp.payload.MockPayload;
 import org.junit.Before;
 import org.junit.Test;
@@ -63,7 +63,7 @@ public class OrderControllerTest extends AbstractControllerTest {
     }
 
     public ResponseEntity<ApiResponse> addOrder() {
-        OrderAddRequest orderAddMockerRequest = MockPayload.getOrderAddMockerRequest();
+        CreateOrderRequest orderAddMockerRequest = MockPayload.getOrderAddMockerRequest();
         orderAddMockerRequest.setCartId(Long.valueOf(CART_ID));
         orderAddMockerRequest.setShippingAddressId(Long.valueOf(ADDRESS_ID));
         HttpEntity<Object> entity = getEntity(orderAddMockerRequest, getHeader());
@@ -78,7 +78,7 @@ public class OrderControllerTest extends AbstractControllerTest {
 
     @Test
     public void testCreateOrder_Failure_InvalidUser() {
-        OrderAddRequest orderAddMockerRequest = MockPayload.getOrderAddMockerRequest();
+        CreateOrderRequest orderAddMockerRequest = MockPayload.getOrderAddMockerRequest();
         orderAddMockerRequest.setCartId(Long.valueOf(CART_ID));
         orderAddMockerRequest.setShippingAddressId(Long.valueOf(ADDRESS_ID));
 
@@ -90,7 +90,7 @@ public class OrderControllerTest extends AbstractControllerTest {
 
     @Test
     public void testCreateOrder_Failure_InvalidCart() {
-        OrderAddRequest orderAddMockerRequest = MockPayload.getOrderAddMockerRequest();
+        CreateOrderRequest orderAddMockerRequest = MockPayload.getOrderAddMockerRequest();
         orderAddMockerRequest.setCartId(-1L);
         orderAddMockerRequest.setShippingAddressId(Long.valueOf(ADDRESS_ID));
 

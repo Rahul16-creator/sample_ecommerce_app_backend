@@ -36,7 +36,7 @@ public class Order extends BaseEntity {
     @JoinColumn(name = "shipping_address_id")
     private Address shippingAddress;
 
-    @OneToMany(mappedBy = "order",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<OrderItems> orderItems;
 
     @Enumerated(value = EnumType.STRING)

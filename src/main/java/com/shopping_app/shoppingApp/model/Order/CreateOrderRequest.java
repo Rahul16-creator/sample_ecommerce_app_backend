@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @Builder
-public class OrderAddRequest {
+public class CreateOrderRequest {
 
     @NotNull
     private Long cartId;
