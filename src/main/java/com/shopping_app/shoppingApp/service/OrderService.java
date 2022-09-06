@@ -105,6 +105,7 @@ public class OrderService {
 
     public OrderResponse updateUserOrderStatus(Long userId, Long orderId, OrderUpdateRequest orderUpdateRequest) {
         Order order = getOrderById(userId, orderId);
+        // check Order status validity
         checkOrderValidity(order, orderUpdateRequest);
 
         // update order cancel status
