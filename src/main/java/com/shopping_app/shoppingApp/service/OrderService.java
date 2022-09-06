@@ -11,7 +11,6 @@ import com.shopping_app.shoppingApp.domain.User;
 import com.shopping_app.shoppingApp.model.Enum.OrderStatus;
 import com.shopping_app.shoppingApp.model.Order.CreateOrderRequest;
 import com.shopping_app.shoppingApp.model.Order.OrderResponse;
-import com.shopping_app.shoppingApp.model.Order.OrderUpdateRequest;
 import com.shopping_app.shoppingApp.repository.CartItemRepository;
 import com.shopping_app.shoppingApp.repository.OrderRepository;
 import com.shopping_app.shoppingApp.repository.ProductRepository;

@@ -3,7 +3,6 @@ package com.shopping_app.shoppingApp.controller;
 import com.shopping_app.shoppingApp.model.AbstractClass.ApiResponse;
 import com.shopping_app.shoppingApp.model.Order.CreateOrderRequest;
 import com.shopping_app.shoppingApp.model.Order.OrderResponse;
-import com.shopping_app.shoppingApp.model.Order.OrderUpdateRequest;
 import com.shopping_app.shoppingApp.service.OrderService;
 import com.shopping_app.shoppingApp.utils.ResponseUtil;
 import lombok.RequiredArgsConstructor;
