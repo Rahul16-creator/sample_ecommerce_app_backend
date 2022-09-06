@@ -6,6 +6,7 @@ import com.shopping_app.shoppingApp.model.Address.AddressRequest;
 import com.shopping_app.shoppingApp.model.Cart.CartAddRequest;
 import com.shopping_app.shoppingApp.model.Cart.CartItemUpdateRequest;
 import com.shopping_app.shoppingApp.model.Enum.UserRole;
+import com.shopping_app.shoppingApp.model.Order.CreateOrderRequest;
 import com.shopping_app.shoppingApp.model.User.UserLoginRequest;
 import com.shopping_app.shoppingApp.model.User.UserRegisterRequest;
 import com.shopping_app.shoppingApp.model.User.UserUpdateRequest;
@@ -79,4 +80,9 @@ public class MockPayload {
     public static CartItemUpdateRequest getCartItemUpdateRequestPayload() {
         return CartItemUpdateRequest.builder().quantity(2).build();
     }
+
+    public static CreateOrderRequest getOrderAddMockerRequest() {
+        return CreateOrderRequest.builder().cartId(1L).shippingAddressId(1L).build();
+    }
+
 }

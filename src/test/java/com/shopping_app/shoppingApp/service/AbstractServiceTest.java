@@ -4,6 +4,7 @@ import com.shopping_app.shoppingApp.domain.User;
 import com.shopping_app.shoppingApp.payload.MockPayload;
 import com.shopping_app.shoppingApp.repository.AddressRepository;
 import com.shopping_app.shoppingApp.repository.CartRepository;
+import com.shopping_app.shoppingApp.repository.OrderRepository;
 import com.shopping_app.shoppingApp.repository.UserRepository;
 import org.junit.After;
 import org.junit.Before;
@@ -24,6 +25,9 @@ public class AbstractServiceTest {
     @Autowired
     public CartRepository cartRepository;
 
+    @Autowired
+    public OrderRepository orderRepository;
+
     public Long userId;
 
     @Before
@@ -37,6 +41,7 @@ public class AbstractServiceTest {
 
     @After
     public void cleanUp() {
+        orderRepository.deleteAll();
         cartRepository.deleteAll();
         addressRepository.deleteAll();
         userRepository.deleteAll();

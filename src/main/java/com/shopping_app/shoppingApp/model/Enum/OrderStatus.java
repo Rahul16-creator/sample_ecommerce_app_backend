@@ -1,15 +1,12 @@
 package com.shopping_app.shoppingApp.model.Enum;
 
-import com.shopping_app.shoppingApp.model.Enum.BaseEnum;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public enum OrderStatus implements BaseEnum {
 
     BOOKED("booked"),
-    PENDING("pending"),
-    FAILED("failed"),
-    DELIVERED("delivered");
+    CANCELLED("cancelled");
 
     private String value;
 
