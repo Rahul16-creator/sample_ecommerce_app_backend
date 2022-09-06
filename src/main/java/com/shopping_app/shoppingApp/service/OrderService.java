@@ -107,6 +107,7 @@ public class OrderService {
         Order order = getOrderById(userId, orderId);
         checkOrderValidity(order, orderUpdateRequest);
 
+        // update order cancel status
         order.setStatus(orderUpdateRequest.getOrderStatus());
         Order updatedOrder = orderRepository.save(order);
 
