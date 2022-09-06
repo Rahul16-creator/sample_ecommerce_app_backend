@@ -99,14 +99,14 @@ public class OrderServiceTest extends AbstractServiceTest {
 
     @Test
     public void testUpdateOrderSuccess() {
-        OrderResponse orderResponse = orderService.updateUserOrderStatus(userId, orderId, MockPayload.getOrderUpdateMockerRequest());
+        OrderResponse orderResponse = orderService.cancelUserOrder(userId, orderId);
         assertNotNull(orderResponse);
     }
 
     @Test
     public void testUpdateOrderFailure_OrderNotFound() {
         try {
-            orderService.updateUserOrderStatus(userId, -1L, MockPayload.getOrderUpdateMockerRequest());
+            orderService.cancelUserOrder(userId, -1L);
         } catch (BaseException ex) {
             assertEquals("Order not found", ex.getMessage());
         }
@@ -115,8 +115,8 @@ public class OrderServiceTest extends AbstractServiceTest {
     @Test
     public void testUpdateOrderFailure_OrderAlreadyCancelled() {
         try {
-            orderService.updateUserOrderStatus(userId, orderId, MockPayload.getOrderUpdateMockerRequest());
-            orderService.updateUserOrderStatus(userId, orderId, MockPayload.getOrderUpdateMockerRequest());
+            orderService.cancelUserOrder(userId, orderId);
+            orderService.cancelUserOrder(userId, orderId);
         } catch (BaseException ex) {
             assertEquals("This order is already cancelled", ex.getMessage());
         }

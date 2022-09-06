@@ -139,33 +139,33 @@ public class OrderControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    public void testUpdateOrderStatus_Success() {
-        HttpEntity<Object> entity = getEntity(MockPayload.getOrderUpdateMockerRequest(), getHeader());
-        ResponseEntity<ApiResponse> response = httpCall("/users/" + USER_ID + "/orders/" + ORDER_ID, HttpMethod.PUT, entity, ApiResponse.class);
+    public void testCancelOrder_Success() {
+        HttpEntity<Object> entity = getEntity(getHeader());
+        ResponseEntity<ApiResponse> response = httpCall("/users/" + USER_ID + "/orders/" + ORDER_ID + "/cancel", HttpMethod.PUT, entity, ApiResponse.class);
         assertEquals(HttpStatus.OK.value(), response.getStatusCodeValue());
     }
 
     @Test
-    public void testUpdateOrderStatus_Failure_InvalidUser() {
-        HttpEntity<Object> entity = getEntity(MockPayload.getOrderUpdateMockerRequest(), getHeader());
-        ResponseEntity<ApiResponse> response = httpCall("/users/-1/orders/" + ORDER_ID, HttpMethod.PUT, entity, ApiResponse.class);
+    public void testCancelOrder_Failure_InvalidUser() {
+        HttpEntity<Object> entity = getEntity(getHeader());
+        ResponseEntity<ApiResponse> response = httpCall("/users/-1/orders/" + ORDER_ID + "/cancel", HttpMethod.PUT, entity, ApiResponse.class);
         assertEquals(HttpStatus.FORBIDDEN.value(), response.getStatusCodeValue());
         assertEquals("Access is denied", response.getBody().getMessage());
     }
 
     @Test
-    public void testUpdateOrderStatus_Failure_OrderNotFound() {
-        HttpEntity<Object> entity = getEntity(MockPayload.getOrderUpdateMockerRequest(), getHeader());
-        ResponseEntity<ApiResponse> response = httpCall("/users/" + USER_ID + "/orders/-1", HttpMethod.PUT, entity, ApiResponse.class);
+    public void ttestCancelOrder_Failure_OrderNotFound() {
+        HttpEntity<Object> entity = getEntity(getHeader());
+        ResponseEntity<ApiResponse> response = httpCall("/users/" + USER_ID + "/orders/-1/cancel", HttpMethod.PUT, entity, ApiResponse.class);
         assertEquals(HttpStatus.FORBIDDEN.value(), response.getStatusCodeValue());
         assertEquals("Order not found", response.getBody().getMessage());
     }
 
     @Test
-    public void testUpdateOrderStatus_Failure_AlreadyUpdated() {
-        HttpEntity<Object> entity = getEntity(MockPayload.getOrderUpdateMockerRequest(), getHeader());
-        httpCall("/users/" + USER_ID + "/orders/" + ORDER_ID, HttpMethod.PUT, entity, ApiResponse.class);
-        ResponseEntity<ApiResponse> response = httpCall("/users/" + USER_ID + "/orders/" + ORDER_ID, HttpMethod.PUT, entity, ApiResponse.class);
+    public void testCancelOrder_Failure_AlreadyUpdated() {
+        HttpEntity<Object> entity = getEntity(getHeader());
+        httpCall("/users/" + USER_ID + "/orders/" + ORDER_ID + "/cancel", HttpMethod.PUT, entity, ApiResponse.class);
+        ResponseEntity<ApiResponse> response = httpCall("/users/" + USER_ID + "/orders/" + ORDER_ID + "/cancel", HttpMethod.PUT, entity, ApiResponse.class);
         assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatusCodeValue());
         assertEquals("This order is already cancelled", response.getBody().getMessage());
     }

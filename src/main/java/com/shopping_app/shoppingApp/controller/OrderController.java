@@ -48,13 +48,10 @@ public class OrderController {
         return new ResponseEntity<>(ResponseUtil.createResponse("Order placed Successfully", orderResponse, HttpStatus.CREATED), HttpStatus.CREATED);
     }
 
-    /**
-     *  update order cancel status
-     */
-    @PutMapping("/users/{userId}/orders/{orderId}")
+    @PutMapping("/users/{userId}/orders/{orderId}/cancel")
     @PreAuthorize("@accessControlService.isAuthenticated(#userId)")
-    public ResponseEntity<ApiResponse> updateUserOrderStatus(@PathVariable Long userId, @PathVariable Long orderId, @Valid @RequestBody OrderUpdateRequest orderUpdateRequest) {
-        OrderResponse orderResponse = orderService.updateUserOrderStatus(userId, orderId, orderUpdateRequest);
+    public ResponseEntity<ApiResponse> cancelUserOrder(@PathVariable Long userId, @PathVariable Long orderId) {
+        OrderResponse orderResponse = orderService.cancelUserOrder(userId, orderId);
         return new ResponseEntity<>(ResponseUtil.createResponse("Order Status Updated Successfully", orderResponse, HttpStatus.OK), HttpStatus.OK);
     }
 }

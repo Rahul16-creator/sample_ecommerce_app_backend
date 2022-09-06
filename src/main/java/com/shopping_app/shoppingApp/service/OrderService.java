@@ -103,13 +103,13 @@ public class OrderService {
         return orderItems;
     }
 
-    public OrderResponse updateUserOrderStatus(Long userId, Long orderId, OrderUpdateRequest orderUpdateRequest) {
+    public OrderResponse cancelUserOrder(Long userId, Long orderId) {
         Order order = getOrderById(userId, orderId);
         // check Order status validity
-        checkOrderValidity(order, orderUpdateRequest);
+        checkOrderValidity(order);
 
         // update order cancel status
-        order.setStatus(orderUpdateRequest.getOrderStatus());
+        order.setStatus(OrderStatus.CANCELLED);
         Order updatedOrder = orderRepository.save(order);
 
         // when order is cancelled , update the product availability count
@@ -125,13 +125,7 @@ public class OrderService {
         }
     }
 
-    public void checkOrderValidity(Order order, OrderUpdateRequest orderUpdateRequest) {
-        /**
-         *  Order status from api should be `CANCELLED` , other than this will be throw exception here
-         */
-        if (!orderUpdateRequest.getOrderStatus().equals(OrderStatus.CANCELLED)) {
-            throw new BaseException("Invalid order status", HttpStatus.BAD_REQUEST);
-        }
+    public void checkOrderValidity(Order order) {
         /**
          *  if the order is already cancelled , then exception will be throw here
          */

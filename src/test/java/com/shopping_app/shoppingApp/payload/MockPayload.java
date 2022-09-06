@@ -87,7 +87,4 @@ public class MockPayload {
         return CreateOrderRequest.builder().cartId(1L).shippingAddressId(1L).build();
     }
 
-    public static OrderUpdateRequest getOrderUpdateMockerRequest() {
-        return OrderUpdateRequest.builder().orderStatus(OrderStatus.CANCELLED).build();
-    }
 }
