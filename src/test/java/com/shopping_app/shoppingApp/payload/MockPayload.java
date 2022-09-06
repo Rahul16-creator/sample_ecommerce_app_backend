@@ -5,7 +5,10 @@ import com.shopping_app.shoppingApp.domain.User;
 import com.shopping_app.shoppingApp.model.Address.AddressRequest;
 import com.shopping_app.shoppingApp.model.Cart.CartAddRequest;
 import com.shopping_app.shoppingApp.model.Cart.CartItemUpdateRequest;
+import com.shopping_app.shoppingApp.model.Enum.OrderStatus;
 import com.shopping_app.shoppingApp.model.Enum.UserRole;
+import com.shopping_app.shoppingApp.model.Order.OrderAddRequest;
+import com.shopping_app.shoppingApp.model.Order.OrderUpdateRequest;
 import com.shopping_app.shoppingApp.model.User.UserLoginRequest;
 import com.shopping_app.shoppingApp.model.User.UserRegisterRequest;
 import com.shopping_app.shoppingApp.model.User.UserUpdateRequest;
@@ -78,5 +81,13 @@ public class MockPayload {
 
     public static CartItemUpdateRequest getCartItemUpdateRequestPayload() {
         return CartItemUpdateRequest.builder().quantity(2).build();
+    }
+
+    public static OrderAddRequest getOrderAddMockerRequest() {
+        return OrderAddRequest.builder().cartId(1L).shippingAddressId(1L).build();
+    }
+
+    public static OrderUpdateRequest getOrderUpdateMockerRequest() {
+        return OrderUpdateRequest.builder().orderStatus(OrderStatus.CANCELLED).build();
     }
 }

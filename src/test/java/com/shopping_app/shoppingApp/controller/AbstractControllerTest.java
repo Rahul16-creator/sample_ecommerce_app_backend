@@ -4,6 +4,7 @@ import com.shopping_app.shoppingApp.model.AbstractClass.ApiResponse;
 import com.shopping_app.shoppingApp.model.User.UserRegisterRequest;
 import com.shopping_app.shoppingApp.repository.AddressRepository;
 import com.shopping_app.shoppingApp.repository.CartRepository;
+import com.shopping_app.shoppingApp.repository.OrderRepository;
 import com.shopping_app.shoppingApp.repository.UserRepository;
 import org.junit.After;
 import org.junit.Before;
@@ -22,7 +23,7 @@ public class AbstractControllerTest {
 
     public static final String AUTHORIZATION = "Authorization";
 
-    public static final String AUTH_TOKEN = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QGdtYWlsLmNvbSIsImlhdCI6MTY2MjAyNTAxNCwiZXhwIjoxNjYyMTExNDE0fQ.cjgdrZFL94Y6-XaPa3maVWdEXSiI2J43HM_vs8qnMHw";
+    public static final String AUTH_TOKEN = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QGdtYWlsLmNvbSIsImlhdCI6MTY2MjM4NjY4OCwiZXhwIjoxNjYyNDczMDg4fQ.U3WWXUsaRVr7pyH0v6zTLukvxgvP8cKZYR6rfk4nd2A";
 
     @Autowired
     private TestRestTemplate restTemplate;
@@ -35,6 +36,9 @@ public class AbstractControllerTest {
 
     @Autowired
     public CartRepository cartRepository;
+
+    @Autowired
+    public OrderRepository orderRepository;
 
     public ResponseEntity<ApiResponse> USER_RESPONSE_ENTITY;
 
@@ -80,6 +84,7 @@ public class AbstractControllerTest {
 
     @After
     public void cleanUp() {
+        orderRepository.deleteAll();
         cartRepository.deleteAll();
         addressRepository.deleteAll();
         userRepository.deleteAll();

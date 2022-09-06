@@ -26,5 +26,5 @@ public class OrderItems extends BaseEntity {
     private int quantity;
 
     @Column(nullable = false, name = "total_price")
-    private Float totalPrice;
+    private double totalPrice;
 }
