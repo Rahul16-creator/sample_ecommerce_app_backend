@@ -50,7 +50,7 @@ public class CartService {
 
         Optional<CartItem> cartItemProduct = cartItemRepository.findByCartIdAndProductId(userCart.getId(), cartRequest.getProduct_id());
         CartItem cartItem = new CartItem();
-        if (cartItemProduct.isEmpty()) {
+        if (!cartItemProduct.isPresent()) {
             cartItem.setProduct(product);
             cartItem.setQuantity(cartRequest.getQuantity());
             cartItem.setCart(userCart);
@@ -106,7 +106,7 @@ public class CartService {
 
     public Cart getCartByUserId(Long userId) {
         Optional<Cart> cart = cartRepository.findByUserId(userId);
-        if (cart.isEmpty()) {
+        if (!cart.isPresent()) {
             log.error("Cart was not found this issue might be happen when registration happen");
             throw new NotFoundException("Cart not found!!", HttpStatus.NOT_FOUND);
         }
@@ -115,7 +115,7 @@ public class CartService {
 
     public CartItem getCartItemByCartId(Long cartItemId, Long cartId) {
         Optional<CartItem> cartItem = cartItemRepository.findByIdAndCartId(cartItemId, cartId);
-        if (cartItem.isEmpty()) {
+        if (!cartItem.isPresent()) {
             throw new BaseException("CartItem not found", HttpStatus.FORBIDDEN);
         }
         return cartItem.get();

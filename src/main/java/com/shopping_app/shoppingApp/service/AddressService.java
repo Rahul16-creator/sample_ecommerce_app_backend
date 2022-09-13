@@ -48,7 +48,7 @@ public class AddressService {
 
     public Address getAddressById(Long userId, Long id) {
         Optional<Address> address = addressRepository.findByIdAndUserId(id, userId);
-        if (address.isEmpty()) {
+        if (!address.isPresent()) {
             throw new BaseException("Address with this Id Not Found for this user!!", HttpStatus.FORBIDDEN);
         }
         return address.get();

@@ -135,7 +135,7 @@ public class OrderService {
 
     public Order getOrderById(Long userId, Long orderId) {
         Optional<Order> order = orderRepository.findByIdAndUserId(orderId, userId);
-        if (order.isEmpty()) {
+        if (!order.isPresent()) {
             throw new BaseException("Order not found", HttpStatus.FORBIDDEN);
         }
         return order.get();

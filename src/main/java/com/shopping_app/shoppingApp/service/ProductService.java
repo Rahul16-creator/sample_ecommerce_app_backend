@@ -18,9 +18,11 @@ import java.util.stream.Collectors;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final WebSocketService webSocketService;
 
     public List<ProductResponse> getAllProducts() {
         List<Product> products = productRepository.findAll();
+        webSocketService.publishProductCount(products.size());
         return products.stream()
                 .map(ProductResponse::from)
                 .collect(Collectors.toList());
@@ -33,7 +35,7 @@ public class ProductService {
 
     public Product findProductById(Long productId) {
         Optional<Product> product = productRepository.findById(productId);
-        if (product.isEmpty()) {
+        if (!product.isPresent()) {
             throw new NotFoundException("Product not found", HttpStatus.NOT_FOUND);
         }
         return product.get();

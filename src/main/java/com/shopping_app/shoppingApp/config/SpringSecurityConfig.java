@@ -44,7 +44,9 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers(HttpMethod.POST, "/user/login")
+                .antMatchers(HttpMethod.GET, "/ws")
                 .antMatchers(HttpMethod.POST, "/user/register");
+
     }
 
     @Override

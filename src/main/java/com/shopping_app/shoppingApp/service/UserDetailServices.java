@@ -30,7 +30,7 @@ public class UserDetailServices implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Optional<User> user = userRepository.findByEmail(email);
-        if (user.isEmpty()) {
+        if (!user.isPresent()) {
             throw new BaseException("User With this email not exist", HttpStatus.UNAUTHORIZED);
         }
         return new UserPrincipal(user.get().getId(), user.get().getEmail(), user.get().getPassword());
